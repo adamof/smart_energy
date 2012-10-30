@@ -25,6 +25,8 @@ end
 gem 'jquery-rails'
 gem 'devise'
 
+gem 'lazy_high_charts'
+gem 'bootstrap-datepicker-rails'
 gem 'roo'
 gem 'rails_admin'
 

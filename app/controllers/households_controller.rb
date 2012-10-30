@@ -15,10 +15,22 @@ class HouseholdsController < ApplicationController
   def show
     @household = Household.find(params[:id])
 
+    @h = LazyHighCharts::HighChart.new('graph') do |f|
+      f.options[:chart][:defaultSeriesType] = "line"
+      f.series(:name=>'First', :data=>Household.first.energy_records.get_readings_for(params[:from], params[:to]))
+      # f.series(:name=>'Second', :data=>Household.last.energy_records.get_readings_for("2011-07-01 10:30:00", "2011-07-02 12:30:00"))
+      # f.xAxis(type: :datetime)
+      f.options[:title][:text] = "lala"
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @household }
     end
+  end
+
+  def change
+    
   end
 
   # GET /households/new

@@ -1,5 +1,28 @@
-<p id="notice"><%= notice %></p>
 
+<div class="row">
+  <div id="my_id" class="span8">
+    <%= high_chart("my_id", @h) %>
+  </div>
+  <div class="span3">
+    <%= form_tag do %>
+      From
+      <input type="text" class="day-picker" value="02-16-2012" id="date-from">
+      To
+      <input type="text" class="day-picker" value="02-16-2012" id="date-to">
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <%= link_to 'Edit', edit_household_path(@household) %> |
+  <%= link_to 'Back', households_path %>
+</div>
 
-<%= link_to 'Edit', edit_household_path(@household) %> |
-<%= link_to 'Back', households_path %>
+<%= javascript_tag do %>
+  $('.day-picker').datepicker({
+    weekStart: 1,
+    format: 'yyyy-mm-dd'
+  });
+  //.on('changeDate', function(ev){
+  //  console.log(ev.date);   
+  //});
+<% end %>
