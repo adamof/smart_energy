@@ -2,7 +2,7 @@ class CreateEnergyRecordModel < ActiveRecord::Migration
   def up
     create_table :energy_records do |t|
       t.integer   :household_id
-      t.integer   :usage
+      t.float     :usage
       t.datetime  :period_end
       t.timestamps
     end

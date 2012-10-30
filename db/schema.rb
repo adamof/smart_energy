@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20121022131202) do
 
   create_table "energy_records", :force => true do |t|
     t.integer  "household_id"
-    t.integer  "usage"
+    t.float    "usage"
     t.datetime "period_end"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false

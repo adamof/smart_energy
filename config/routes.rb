@@ -1,4 +1,6 @@
 SmartEnergy::Application.routes.draw do
+  resources :households
+
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
