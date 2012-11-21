@@ -4,12 +4,16 @@
     <%= high_chart("my_id", @h) %>
   </div>
   <div class="span3">
-    <%= form_tag do %>
+    <%= form_tag household_path, method: :get do %>
       From
-      <input type="text" class="day-picker" value="2011-07-02" id="date-from">
+      <%= text_field "search", "date_from", 
+                              value: params[:search][:date_from], 
+                              class: "day_picker" %>
       To
-      <input type="text" class="day-picker" value="2011-07-03" id="date-to">
-      
+      <%= text_field "search", "date_to", 
+                              value: params[:search][:date_to], 
+                              class: "day_picker" %>
+      <%= submit_tag "GO" %>
     <% end %>
   </div>
 </div>
@@ -18,13 +22,8 @@
   <%= link_to 'Back', households_path %>
 </div>
 
-<%= javascript_tag do %>
-  $('.day-picker').datepicker({
-    weekStart: 1,
-    format: 'yyyy-mm-dd',
-    startDate: 
-  });
-  //.on('changeDate', function(ev){
-  //  console.log(ev.date);   
-  //});
-<% end %>
+<%= render partial: 'show_js.html.erb' %>
+      From
+      <input type="text" class="day_picker" id="date_from">
+      To
+      <input type="text" class="day_picker" id="date_to">

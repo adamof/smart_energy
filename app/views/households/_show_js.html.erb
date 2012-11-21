@@ -1,0 +1,12 @@
+<%= javascript_tag do %>
+  $(function(){
+    var fromField = $("#date_from");
+    var toField = $("#date_to")
+    // var fromField = $("#date_from");
+    $(".day_picker").datepicker({
+      format: 'yyyy-mm-dd'
+    }).on('changeDate', function(ev){
+      $(this).datepicker('hide');   
+    });
+  });
+<% end %>

@@ -16,11 +16,11 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     
     @h = LazyHighCharts::HighChart.new('graph') do |f|
-      f.options[:chart][:defaultSeriesType] = "line"
+      f.options[:chart][:defaultSeriesType] = "column"
       # f.options[:chart][:inverted] = "True"
       f.series( name: 'First', 
-                data: Household.first.get_readings_for(params[:from], params[:to]),
-                pointStart: DateTime.strptime(params[:from], "%Y-%m-%d").to_time.to_i*1000,
+                data: Household.first.get_readings_for(params[:search][:date_from], params[:search][:date_to]),
+                pointStart: DateTime.strptime(params[:search][:date_from], "%Y-%m-%d").to_time.to_i*1000,
                 pointInterval: 24 * 3600 * 1000  
       )
       # f.series(:name=>'Second', :data=>Household.last.energy_records.get_readings_for(params[:from], params[:to]))
