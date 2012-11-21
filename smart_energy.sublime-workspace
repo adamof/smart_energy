@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"ea",
+				"eak	each_key { |key| .. }"
+			],
+			[
+				"ho",
+				"household"
+			],
+			[
+				"def",
+				"defs	def self .. end"
+			],
+			[
+				"peri",
+				"period_end"
+			],
+			[
 				"di",
 				"distribution"
 			],
@@ -94,10 +110,6 @@
 			[
 				"propert",
 				"property_searches"
-			],
-			[
-				"def",
-				"def	def … end"
 			],
 			[
 				"fanc",
@@ -502,18 +514,6 @@
 			[
 				"eac",
 				"each"
-			],
-			[
-				"Fac",
-				"FactoryGirl"
-			],
-			[
-				"match",
-				"match_license_numbers"
-			],
-			[
-				"mat",
-				"match_license_numbers"
 			]
 		]
 	},
@@ -528,42 +528,26 @@
 			}
 		},
 		{
-			"file": "lib/import_data.rb",
+			"file": "app/views/layouts/application.html.erb",
 			"settings":
 			{
-				"buffer_size": 1411,
+				"buffer_size": 397,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db/migrate/20121022102505_create_energy_record_model.rb",
+			"file": "app/assets/javascripts/application.js",
 			"settings":
 			{
-				"buffer_size": 278,
+				"buffer_size": 697,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/models/energy_record.rb",
+			"file": "app/controllers/households_controller.rb",
 			"settings":
 			{
-				"buffer_size": 117,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "db/migrate/20121022131202_add_household_association_to_user.rb",
-			"settings":
-			{
-				"buffer_size": 132,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "config/environments/development.rb",
-			"settings":
-			{
-				"buffer_size": 1453,
+				"buffer_size": 2750,
 				"line_ending": "Unix"
 			}
 		},
@@ -584,42 +568,34 @@
 			}
 		},
 		{
-			"file": "app/views/users/home.html.erb",
+			"file": "app/views/households/show.html.erb",
 			"settings":
 			{
-				"buffer_size": 83,
+				"buffer_size": 687,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/views/layouts/application.html.erb",
+			"file": "app/models/energy_record.rb",
 			"settings":
 			{
-				"buffer_size": 353,
+				"buffer_size": 442,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db/migrate/20121016230634_create_user_table.rb",
+			"file": "Gemfile",
 			"settings":
 			{
-				"buffer_size": 165,
+				"buffer_size": 905,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db/migrate/20121022104928_create_household_model.rb",
+			"file": "config/routes.rb",
 			"settings":
 			{
-				"buffer_size": 201,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/controllers/households_controller.rb",
-			"settings":
-			{
-				"buffer_size": 2079,
+				"buffer_size": 1897,
 				"line_ending": "Unix"
 			}
 		}
@@ -704,19 +680,26 @@
 	},
 	"file_history":
 	[
+		"/home/badjo/smart_energy/app/assets/stylesheets/application.css",
+		"/home/badjo/smart_energy/Gemfile",
+		"/home/badjo/smart_energy/app/views/users/home.html.erb",
+		"/home/badjo/smart_energy/db/migrate/20121022104928_create_household_model.rb",
+		"/home/badjo/smart_energy/db/migrate/20121016230634_create_user_table.rb",
+		"/home/badjo/smart_energy/app/controllers/households_controller.rb",
+		"/home/badjo/smart_energy/config/environments/development.rb",
+		"/home/badjo/smart_energy/db/migrate/20121022131202_add_household_association_to_user.rb",
+		"/home/badjo/smart_energy/db/migrate/20121022102505_create_energy_record_model.rb",
+		"/home/badjo/smart_energy/lib/import_data.rb",
 		"/home/badjo/smart_energy/app/views/households/show.html.erb",
 		"/home/badjo/smart_energy/db/migrate/20121022133353_create_households.rb",
 		"/home/badjo/smart_energy/config/routes.rb",
-		"/home/badjo/smart_energy/Gemfile",
 		"/home/badjo/smart_energy/config/database.yml",
-		"/home/badjo/smart_energy/db/migrate/20121016230634_create_user_table.rb",
 		"/home/badjo/gneekk/webinar-manager/Gemfile",
 		"/home/badjo/smart_energy/app/views/layouts/energy_record.rb",
 		"/home/badjo/smart_energy/app/views/layouts/household.rb",
 		"/home/badjo/smart_energy/db/schema.rb",
 		"/home/badjo/smart_energy/config/application.rb",
 		"/home/badjo/smart_energy/app/views/devise/sessions/new.html.erb",
-		"/home/badjo/smart_energy/app/assets/stylesheets/application.css",
 		"/home/badjo/smart_energy/db/migrate/20121016230802_add_devise_to_users.rb",
 		"/home/badjo/smart_energy/db/migrate/20121016230448_add_devise_to_users.rb",
 		"/home/badjo/smart_energy/app/models/user_account.rb",
@@ -824,14 +807,7 @@
 		"/home/badjo/purple/BigPurpleDot/app/views/market/property_searches/_form_mini.html.erb",
 		"/home/badjo/purple/BigPurpleDot/app/views/market/properties/_header.html.erb",
 		"/home/badjo/purple/BigPurpleDot/app/helpers/favorite_properties_helper.rb",
-		"/home/badjo/purple/BigPurpleDot/app/controllers/contact_user_logins_controller.rb",
-		"/home/badjo/purple/BigPurpleDot/spec/integration/traffic/custom_mail_form_spec.rb",
-		"/home/badjo/purple/BigPurpleDot/spec/factories/property.rb",
-		"/home/badjo/purple/BigPurpleDot/app/views/user_account_login/create.js.erb",
-		"/home/badjo/purple/BigPurpleDot/app/views/contact_users/create.js.erb",
-		"/home/badjo/purple/BigPurpleDot/app/views/user_accounts/create.js.erb",
-		"/home/badjo/purple/BigPurpleDot/app/assets/javascripts/area_autocomplete.js",
-		"/home/badjo/purple/BigPurpleDot/app/controllers/user_accounts_controller.rb"
+		"/home/badjo/purple/BigPurpleDot/app/controllers/contact_user_logins_controller.rb"
 	],
 	"find":
 	{
@@ -850,6 +826,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"date",
+			"created_at",
 			"this",
 			"\"\n",
 			"276fcfae",
@@ -975,9 +953,7 @@
 			"search",
 			"#search_days_on_market",
 			"market_property_search_school_district",
-			"#search_days_on_market",
-			"days_on_market",
-			"school"
+			"#search_days_on_market"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1003,7 +979,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1036,23 +1012,23 @@
 				},
 				{
 					"buffer": 1,
-					"file": "lib/import_data.rb",
+					"file": "app/views/layouts/application.html.erb",
 					"settings":
 					{
-						"buffer_size": 1411,
+						"buffer_size": 397,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								577,
-								577
+								211,
+								211
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -1064,25 +1040,23 @@
 				},
 				{
 					"buffer": 2,
-					"file": "db/migrate/20121022102505_create_energy_record_model.rb",
+					"file": "app/assets/javascripts/application.js",
 					"settings":
 					{
-						"buffer_size": 278,
+						"buffer_size": 697,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								152,
-								152
+								677,
+								677
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1092,52 +1066,28 @@
 				},
 				{
 					"buffer": 3,
-					"file": "app/models/energy_record.rb",
+					"file": "app/controllers/households_controller.rb",
 					"settings":
 					{
-						"buffer_size": 117,
+						"buffer_size": 2750,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								93,
-								93
+								956,
+								956
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "db/migrate/20121022131202_add_household_association_to_user.rb",
-					"settings":
-					{
-						"buffer_size": 132,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								121,
-								121
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 55.0,
+						"translation.y": 15.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1149,35 +1099,7 @@
 			"sheets":
 			[
 				{
-					"buffer": 5,
-					"file": "config/environments/development.rb",
-					"settings":
-					{
-						"buffer_size": 1453,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								800,
-								800
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
+					"buffer": 4,
 					"file": "app/controllers/application_controller.rb",
 					"settings":
 					{
@@ -1203,7 +1125,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 5,
 					"file": "app/controllers/users_controller.rb",
 					"settings":
 					{
@@ -1229,24 +1151,78 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "app/views/users/home.html.erb",
+					"buffer": 6,
+					"file": "app/views/households/show.html.erb",
 					"settings":
 					{
-						"buffer_size": 83,
+						"buffer_size": 687,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								83,
-								83
+								323,
+								323
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Rails/HTML (Rails).tmLanguage"
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "app/models/energy_record.rb",
+					"settings":
+					{
+						"buffer_size": 442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								431,
+								431
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 150.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Gemfile",
+					"settings":
+					{
+						"buffer_size": 905,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								617,
+								617
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1256,96 +1232,18 @@
 				},
 				{
 					"buffer": 9,
-					"file": "app/views/layouts/application.html.erb",
+					"file": "config/routes.rb",
 					"settings":
 					{
-						"buffer_size": 353,
+						"buffer_size": 1897,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								311,
-								311
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Rails/HTML (Rails).tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "db/migrate/20121016230634_create_user_table.rb",
-					"settings":
-					{
-						"buffer_size": 165,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "db/migrate/20121022104928_create_household_model.rb",
-					"settings":
-					{
-						"buffer_size": 201,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								118,
-								118
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "app/controllers/households_controller.rb",
-					"settings":
-					{
-						"buffer_size": 2079,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								62,
-								62
+								63,
+								63
 							]
 						],
 						"settings":
@@ -1391,7 +1289,7 @@
 		"cols":
 		[
 			0.0,
-			0.5,
+			0.472906403941,
 			1.0
 		],
 		"rows":
@@ -1412,6 +1310,30 @@
 		"selected_items":
 		[
 			[
+				"routes",
+				"config/routes.rb"
+			],
+			[
+				"application",
+				"app/assets/stylesheets/application.css"
+			],
+			[
+				"gemf",
+				"Gemfile"
+			],
+			[
+				"households_con",
+				"app/controllers/households_controller.rb"
+			],
+			[
+				"gemfi",
+				"Gemfile"
+			],
+			[
+				"households/",
+				"app/views/households/show.html.erb"
+			],
+			[
 				"households/show",
 				"app/views/households/show.html.erb"
 			],
@@ -1422,10 +1344,6 @@
 			[
 				"household",
 				"app/controllers/households_controller.rb"
-			],
-			[
-				"routes",
-				"config/routes.rb"
 			],
 			[
 				"database",
@@ -1456,10 +1374,6 @@
 				"config/application.rb"
 			],
 			[
-				"gemf",
-				"Gemfile"
-			],
-			[
 				"views/devise/sess",
 				"app/views/devise/sessions/new.html.erb"
 			],
@@ -1482,10 +1396,6 @@
 			[
 				"config/d",
 				"config/database.yml"
-			],
-			[
-				"application",
-				"app/views/layouts/application.html.erb"
 			],
 			[
 				"controll",
@@ -1910,18 +1820,6 @@
 			[
 				"visit",
 				"app/views/traffic/custom_property_mails/_visitor_form.html.erb"
-			],
-			[
-				"edit_passo",
-				"app/views/users/edit_password.html.erb"
-			],
-			[
-				"custom_property_mail/",
-				"app/views/traffic/custom_property_mails/new.html.erb"
-			],
-			[
-				"location_aut",
-				"app/views/shared/_location_autocomplete.erb"
 			]
 		],
 		"width": 0.0

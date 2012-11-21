@@ -27,6 +27,8 @@ gem 'devise'
 
 gem 'lazy_high_charts'
 gem 'bootstrap-datepicker-rails'
+gem 'bootstrap-timepicker-rails', :require => 'bootstrap-timepicker-rails',
+                                  :git => 'git://github.com/tispratik/bootstrap-timepicker-rails.git'
 gem 'roo'
 gem 'rails_admin'
 

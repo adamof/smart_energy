@@ -6,9 +6,10 @@
   <div class="span3">
     <%= form_tag do %>
       From
-      <input type="text" class="day-picker" value="02-16-2012" id="date-from">
+      <input type="text" class="day-picker" value="2011-07-02" id="date-from">
       To
-      <input type="text" class="day-picker" value="02-16-2012" id="date-to">
+      <input type="text" class="day-picker" value="2011-07-03" id="date-to">
+      
     <% end %>
   </div>
 </div>
@@ -20,7 +21,8 @@
 <%= javascript_tag do %>
   $('.day-picker').datepicker({
     weekStart: 1,
-    format: 'yyyy-mm-dd'
+    format: 'yyyy-mm-dd',
+    startDate: 
   });
   //.on('changeDate', function(ev){
   //  console.log(ev.date);   

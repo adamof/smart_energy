@@ -4,8 +4,9 @@ class EnergyRecord < ActiveRecord::Base
 
   scope :within_range, lambda {  }
 
-  def self.get_readings_for(from, to)
-    @readings = where("period_end >= ? AND period_end <= ?", from, to).order("period_end")
-    return @readings.map{|r| r.usage}
-  end
+  # def self.get_readings_for(from, to, unit="day")
+  #   @readings = where("period_end >= ? AND period_end <= ?", from, to).order("period_end")
+  #   # res = @readings.map{|r| r.usage}
+  #   return @readings.group_by{ |u| u.period_end.beginning_of_day }.map {|k,v| v.map{|r| r.usage}.sum}
+  # end
 end
