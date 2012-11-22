@@ -5,6 +5,12 @@ GIT
     bootstrap-timepicker-rails (0.1.2)
       railties (>= 3.0)
 
+PATH
+  remote: /home/badjo/lazy_high_charts
+  specs:
+    lazy_high_charts (1.2.2)
+      bundler (~> 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -88,8 +94,6 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    lazy_high_charts (1.2.2)
-      bundler (~> 1.0)
     log4r (1.1.10)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -198,7 +202,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   devise
   jquery-rails
-  lazy_high_charts
+  lazy_high_charts!
   mysql2
   rails (= 3.2.8)
   rails_admin

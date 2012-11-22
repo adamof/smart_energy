@@ -23,7 +23,30 @@
 </div>
 
 <%= render partial: 'show_js.html.erb' %>
-      From
-      <input type="text" class="day_picker" id="date_from">
-      To
-      <input type="text" class="day_picker" id="date_to">
+<button id="button">Change type</button>
+<%= javascript_tag do %>
+  function changeType(series, newType) {
+    var dataArray = [],
+        points = series.data;
+    
+    console.log(series.options.data);
+    series.chart.addSeries({
+        type: newType,
+        name: series.name,
+        color: series.color,
+        data: series.options.data
+    }, false);
+    
+    series.remove();
+  }
+  $('#button').click(function() {
+    for(i = 0, l = chart.series.length; i < l; ++i) {
+      var series = window.chart.series[0],
+          newType = series.type == 'line' ? 'column' : 'line';
+      changeType(series, newType);
+      }
+  })
+  $('#chartType').change(function(){
+      chart.changeSeriesType(this.value);
+  });
+<% end %>

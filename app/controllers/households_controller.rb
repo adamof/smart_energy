@@ -14,17 +14,16 @@ class HouseholdsController < ApplicationController
   # GET /households/1.json
   def show
     @household = Household.find(params[:id])
-    
-    @h = LazyHighCharts::HighChart.new('graph') do |f|
+    @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d").to_time.to_i*1000
+    @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d").to_time.to_i*1000
+
+    @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
       f.options[:chart][:defaultSeriesType] = "column"
-      # f.options[:chart][:inverted] = "True"
       f.series( name: 'First', 
-                data: Household.first.get_readings_for(params[:search][:date_from], params[:search][:date_to]),
-                pointStart: DateTime.strptime(params[:search][:date_from], "%Y-%m-%d").to_time.to_i*1000,
-                pointInterval: 24 * 3600 * 1000  
+                data: Household.first.get_readings_for(params[:search][:date_from], params[:search][:date_to])
       )
-      # f.series(:name=>'Second', :data=>Household.last.energy_records.get_readings_for(params[:from], params[:to]))
-      f.xAxis(type: :datetime, maxZoom: 24*3600*1000)
+      f.xAxis(type: :datetime,
+              tickInterval: 24*3600*1000)
       f.options[:title][:text] = "lala"
     end
 
