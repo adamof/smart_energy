@@ -1,0 +1,3 @@
+class GasRecord < EnergyRecord
+  
+end

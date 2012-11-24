@@ -1,0 +1,3 @@
+class PowerRecord < EnergyRecord
+  
+end

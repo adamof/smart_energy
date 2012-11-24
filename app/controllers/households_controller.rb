@@ -14,16 +14,24 @@ class HouseholdsController < ApplicationController
   # GET /households/1.json
   def show
     @household = Household.find(params[:id])
-    @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
-    @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d")
+    if params[:search]
+      @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
+      @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d")
+    else
+      @start_time = EnergyRecord.first.period_end.to_date
+      @end_time = @start_time + 7.days
+    end
 
     calculate_ticks
 
     @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
-      f.options[:chart][:defaultSeriesType] = "column"
+      f.options[:chart][:defaultSeriesType] = current_user.chart_type
       f.series( name: 'First', 
                 data: Household.first.get_readings_for(@start_time, @end_time, @unit)
       )
+      # f.series( name: 'Second', 
+      #           data: Household.last.get_readings_for(@start_time, @end_time, @unit)
+      # )
       f.xAxis(type: :datetime,
               labels: {
                 rotation: -60,
@@ -117,7 +125,7 @@ class HouseholdsController < ApplicationController
     if diff < 2
       @unit = "hour"
       @interval = 3600*1000
-    elsif diff < 14
+    elsif diff < 32
       @unit = "day"
       @interval = 24*3600*1000
     else

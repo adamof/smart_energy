@@ -4,9 +4,32 @@
     var toField = $("#date_to")
     // var fromField = $("#date_from");
     $(".day_picker").datepicker({
-      format: 'yyyy-mm-dd'
-    }).on('changeDate', function(ev){
-      $(this).datepicker('hide');   
+      format: 'yyyy-mm-dd',
+      autoclose: true
+    });//.on('changeDate', function(ev){
+    //   $(this).datepicker('hide');   
+    // });
+    function changeType(series, newType) {
+      var dataArray = [],
+          points = series.data;
+      series.chart.addSeries({
+          type: newType,
+          name: series.name,
+          color: series.color,
+          data: series.options.data
+      }, false);
+      
+      series.remove();
+    }
+    $('#chart_type').change(function() {
+      for(i = 0, l = chart.series.length; i < l; ++i) {
+        var series = window.chart.series[0],
+            newType = $(this).val();
+        changeType(series, newType);
+      }
+    });
+    $('#chartType').change(function(){
+        chart.changeSeriesType(this.value);
     });
   });
 <% end %>

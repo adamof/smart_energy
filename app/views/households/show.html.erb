@@ -1,18 +1,24 @@
 
 <div class="row">
-  <div id="my_id" class="span9">
-    <%= high_chart("my_id", @h) %>
+  <div class="span10">
+    <div id="chart_container">
+      <%= high_chart("chart_container", @h) %>
+    </div>
+    <%= select  "chart", 
+                "type", 
+                CHART_TYPES, 
+                selected: current_user.chart_type %>
   </div>
   <div class="span2">
     <%= form_tag household_path, method: :get do %>
       From
       <%= text_field "search", "date_from", 
-                              value: params[:search][:date_from], 
-                              class: "day_picker" %>
+                              value: @start_time.to_date, 
+                              class: "day_picker input-small" %>
       To
       <%= text_field "search", "date_to", 
-                              value: params[:search][:date_to], 
-                              class: "day_picker" %>
+                              value: @end_time.to_date, 
+                              class: "day_picker input-small" %>
       <%= submit_tag "GO" %>
     <% end %>
   </div>
@@ -21,32 +27,4 @@
   <%= link_to 'Edit', edit_household_path(@household) %> |
   <%= link_to 'Back', households_path %>
 </div>
-
 <%= render partial: 'show_js.html.erb' %>
-<button id="button">Change type</button>
-<%= javascript_tag do %>
-  function changeType(series, newType) {
-    var dataArray = [],
-        points = series.data;
-    
-    console.log(series.options.data);
-    series.chart.addSeries({
-        type: newType,
-        name: series.name,
-        color: series.color,
-        data: series.options.data
-    }, false);
-    
-    series.remove();
-  }
-  $('#button').click(function() {
-    for(i = 0, l = chart.series.length; i < l; ++i) {
-      var series = window.chart.series[0],
-          newType = series.type == 'line' ? 'column' : 'line';
-      changeType(series, newType);
-      }
-  })
-  $('#chartType').change(function(){
-      chart.changeSeriesType(this.value);
-  });
-<% end %>

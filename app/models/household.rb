@@ -13,6 +13,6 @@ class Household < ActiveRecord::Base
     when "week"
       time_unit = :beginning_of_week
     end
-    return @readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum]}
+    return @readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum.round(2)]}
   end
 end
