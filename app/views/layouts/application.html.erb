@@ -13,10 +13,18 @@
       <div class="container">
         <a class="brand" href="#">Smart Energy</a>
         <ul class="nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><%= link_to "Gas", household_path(current_user.household,{type: "gas"}) %></li>
-          <li><%= link_to "Power", household_path(current_user.household, {type: "power"}) %></li>
-          <li><a href="#">C02</a></li>
+          <li class="<%= 'active' if current_page?(household_path) %>">
+            <%= link_to "Dashboard", household_path(current_user.household) %>
+          </li>
+          <li class="<%= 'active' if current_page?(power_usage_household_path) %>">
+            <%= link_to "Power", power_usage_household_path(current_user.household) %>
+          </li>
+          <li class="<%= 'active' if current_page?(gas_usage_household_path) %>">
+            <%= link_to "Gas", gas_usage_household_path(current_user.household) %>
+          </li>
+          <li>
+            <a href="#">C02</a>
+          </li>
         </ul>
         <ul class="nav pull-right">
           <% if user_signed_in? %>

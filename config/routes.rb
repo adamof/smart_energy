@@ -1,5 +1,10 @@
 SmartEnergy::Application.routes.draw do
-  resources :households
+  resources :households do
+    member do
+      get "gas_usage", as: :gas_usage
+      get "power_usage", as: :power_usage
+    end
+  end
 
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 

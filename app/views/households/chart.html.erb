@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="span10">
+    <div id="chart_container">
+      <%= high_chart("chart_container", @h) %>
+    </div>
+    <%= select  "chart", 
+                "type", 
+                CHART_TYPES, 
+                selected: current_user.chart_type %>
+  </div>
+  <div class="span2">
+    <%= form_tag household_path, method: :get do %>
+      From
+      <%= text_field "search", "date_from", 
+                              value: @start_time.to_date, 
+                              class: "day_picker input-small" %>
+      To
+      <%= text_field "search", "date_to", 
+                              value: @end_time.to_date, 
+                              class: "day_picker input-small" %>
+      <%= submit_tag "GO" %>
+    <% end %>
+  </div>
+</div>
+<%= render partial: 'show_js.html.erb' %>

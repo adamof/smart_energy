@@ -10,9 +10,22 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  # GET /households/1
-  # GET /households/1.json
-  def show
+  def gas_usage
+    @type = "gas"
+    generate_chart
+    render :chart
+  end
+
+  def power_usage
+    @type = "power"
+    generate_chart
+    render :chart
+  end
+
+  def chart
+  end
+
+  def generate_chart
     @household = Household.find(params[:id])
     if params[:search]
       @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
@@ -27,7 +40,7 @@ class HouseholdsController < ApplicationController
     @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
       f.options[:chart][:defaultSeriesType] = current_user.chart_type
       f.series( name: 'First', 
-                data: Household.first.get_readings_for(params[:type], @start_time, @end_time, @unit)
+                data: @household.get_readings_for(@type, @start_time, @end_time, @unit)
       )
       # f.series( name: 'Second', 
       #           data: Household.last.get_readings_for(@start_time, @end_time, @unit)
@@ -47,6 +60,11 @@ class HouseholdsController < ApplicationController
               gridLineWidth: '1')
       f.options[:title][:text] = "lala"
     end
+  end
+  # GET /households/1
+  # GET /households/1.json
+  def show
+    @household = Household.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
