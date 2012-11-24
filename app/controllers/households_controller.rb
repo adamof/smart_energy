@@ -14,16 +14,29 @@ class HouseholdsController < ApplicationController
   # GET /households/1.json
   def show
     @household = Household.find(params[:id])
-    @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d").to_time.to_i*1000
-    @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d").to_time.to_i*1000
+    @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
+    @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d")
+
+    calculate_ticks
 
     @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
       f.options[:chart][:defaultSeriesType] = "column"
       f.series( name: 'First', 
-                data: Household.first.get_readings_for(params[:search][:date_from], params[:search][:date_to])
+                data: Household.first.get_readings_for(@start_time, @end_time, @unit)
       )
       f.xAxis(type: :datetime,
-              tickInterval: 24*3600*1000)
+              labels: {
+                rotation: -60,
+                align: 'right',
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+              },
+              tickInterval: @interval,
+              gridLineColor: '#bfbfc0',
+              gridLineDashStyle: 'ShortDash',
+              gridLineWidth: '1')
       f.options[:title][:text] = "lala"
     end
 
@@ -94,6 +107,22 @@ class HouseholdsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to households_url }
       format.json { head :no_content }
+    end
+  end
+
+  private
+
+  def calculate_ticks
+    diff = @end_time - @start_time
+    if diff < 2
+      @unit = "hour"
+      @interval = 3600*1000
+    elsif diff < 14
+      @unit = "day"
+      @interval = 24*3600*1000
+    else
+      @unit = "week"
+      @interval = 7*24*3600*1000
     end
   end
 end

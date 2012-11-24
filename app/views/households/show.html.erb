@@ -1,9 +1,9 @@
 
 <div class="row">
-  <div id="my_id" class="span8">
+  <div id="my_id" class="span9">
     <%= high_chart("my_id", @h) %>
   </div>
-  <div class="span3">
+  <div class="span2">
     <%= form_tag household_path, method: :get do %>
       From
       <%= text_field "search", "date_from", 

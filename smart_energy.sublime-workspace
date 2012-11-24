@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"end",
+				"end_time"
+			],
+			[
 				"ea",
 				"eak	each_key { |key| .. }"
 			],
@@ -510,10 +514,6 @@
 			[
 				"face",
 				"facebook_access_token"
-			],
-			[
-				"eac",
-				"each"
 			]
 		]
 	},
@@ -539,7 +539,7 @@
 			"file": "app/assets/javascripts/application.js",
 			"settings":
 			{
-				"buffer_size": 697,
+				"buffer_size": 702,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,15 +547,15 @@
 			"file": "app/controllers/households_controller.rb",
 			"settings":
 			{
-				"buffer_size": 2750,
+				"buffer_size": 2691,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/controllers/application_controller.rb",
+			"file": "app/views/households/_show_js.html.erb",
 			"settings":
 			{
-				"buffer_size": 80,
+				"buffer_size": 309,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,7 +571,7 @@
 			"file": "app/views/households/show.html.erb",
 			"settings":
 			{
-				"buffer_size": 687,
+				"buffer_size": 1470,
 				"line_ending": "Unix"
 			}
 		},
@@ -579,7 +579,7 @@
 			"file": "app/models/energy_record.rb",
 			"settings":
 			{
-				"buffer_size": 442,
+				"buffer_size": 452,
 				"line_ending": "Unix"
 			}
 		},
@@ -587,7 +587,7 @@
 			"file": "Gemfile",
 			"settings":
 			{
-				"buffer_size": 905,
+				"buffer_size": 1203,
 				"line_ending": "Unix"
 			}
 		},
@@ -596,6 +596,14 @@
 			"settings":
 			{
 				"buffer_size": 1897,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/models/household.rb",
+			"settings":
+			{
+				"buffer_size": 412,
 				"line_ending": "Unix"
 			}
 		}
@@ -680,6 +688,9 @@
 	},
 	"file_history":
 	[
+		"/home/badjo/lazy_high_charts/lib/lazy_high_charts/layout_helper.rb",
+		"/home/badjo/smart_energy/vendor/assets/javascripts/highcharts.js",
+		"/home/badjo/smart_energy/app/controllers/application_controller.rb",
 		"/home/badjo/smart_energy/app/assets/stylesheets/application.css",
 		"/home/badjo/smart_energy/Gemfile",
 		"/home/badjo/smart_energy/app/views/users/home.html.erb",
@@ -804,10 +815,7 @@
 		"/home/badjo/cover",
 		"/home/badjo/.config/sublime-text-2/Packages/User/params.sublime-snippet",
 		"/home/badjo/purple/BigPurpleDot/app/views/property_searches/new.html.erb",
-		"/home/badjo/purple/BigPurpleDot/app/views/market/property_searches/_form_mini.html.erb",
-		"/home/badjo/purple/BigPurpleDot/app/views/market/properties/_header.html.erb",
-		"/home/badjo/purple/BigPurpleDot/app/helpers/favorite_properties_helper.rb",
-		"/home/badjo/purple/BigPurpleDot/app/controllers/contact_user_logins_controller.rb"
+		"/home/badjo/purple/BigPurpleDot/app/views/market/property_searches/_form_mini.html.erb"
 	],
 	"find":
 	{
@@ -826,6 +834,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"start_time",
+			"start",
+			"dataArray",
+			"core_js",
+			"raw",
+			"params",
+			"_",
+			"-",
+			"unit",
 			"date",
 			"created_at",
 			"this",
@@ -944,16 +961,7 @@
 			"Search",
 			"search",
 			"Search",
-			"search",
-			"Search",
-			"label",
-			"div",
-			"shared/search_form_full",
-			"search_form_full",
-			"search",
-			"#search_days_on_market",
-			"market_property_search_school_district",
-			"#search_days_on_market"
+			"search"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1043,15 +1051,15 @@
 					"file": "app/assets/javascripts/application.js",
 					"settings":
 					{
-						"buffer_size": 697,
+						"buffer_size": 702,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								677,
-								677
+								645,
+								645
 							]
 						],
 						"settings":
@@ -1069,15 +1077,15 @@
 					"file": "app/controllers/households_controller.rb",
 					"settings":
 					{
-						"buffer_size": 2750,
+						"buffer_size": 2691,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								956,
-								956
+								864,
+								864
 							]
 						],
 						"settings":
@@ -1086,8 +1094,36 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 55.0,
-						"translation.y": 15.0,
+						"translation.x": 0.0,
+						"translation.y": 105.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/views/households/_show_js.html.erb",
+					"settings":
+					{
+						"buffer_size": 309,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								24
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1095,35 +1131,9 @@
 			]
 		},
 		{
-			"selected": 3,
+			"selected": 5,
 			"sheets":
 			[
-				{
-					"buffer": 4,
-					"file": "app/controllers/application_controller.rb",
-					"settings":
-					{
-						"buffer_size": 80,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								76,
-								76
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
 				{
 					"buffer": 5,
 					"file": "app/controllers/users_controller.rb",
@@ -1155,15 +1165,15 @@
 					"file": "app/views/households/show.html.erb",
 					"settings":
 					{
-						"buffer_size": 687,
+						"buffer_size": 1470,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								323,
-								323
+								1363,
+								1363
 							]
 						],
 						"settings":
@@ -1173,7 +1183,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 227.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1183,22 +1193,22 @@
 					"file": "app/models/energy_record.rb",
 					"settings":
 					{
-						"buffer_size": 442,
+						"buffer_size": 452,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								431,
-								431
+								151,
+								151
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
-						"translation.x": 150.0,
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -1209,15 +1219,15 @@
 					"file": "Gemfile",
 					"settings":
 					{
-						"buffer_size": 905,
+						"buffer_size": 1203,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								617,
-								617
+								584,
+								584
 							]
 						],
 						"settings":
@@ -1242,8 +1252,8 @@
 						"selection":
 						[
 							[
-								63,
-								63
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1251,6 +1261,32 @@
 							"syntax": "Packages/Ruby/Ruby.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "app/models/household.rb",
+					"settings":
+					{
+						"buffer_size": 412,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								376,
+								376
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1309,6 +1345,26 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"javas",
+				"smart_energy/vendor/assets/javascripts/highcharts.js"
+			],
+			[
+				"javascri",
+				"smart_energy/vendor/assets/javascripts/highcharts.js"
+			],
+			[
+				"layout",
+				"lazy_high_charts/lib/lazy_high_charts/layout_helper.rb"
+			],
+			[
+				"show_",
+				"app/views/households/_show_js.html.erb.html.erb"
+			],
+			[
+				"househo",
+				"app/models/household.rb"
+			],
 			[
 				"routes",
 				"config/routes.rb"
@@ -1594,10 +1650,6 @@
 				"app/views/layouts/properties.html.erb"
 			],
 			[
-				"layout",
-				"app/views/layouts/tenant.html.erb"
-			],
-			[
 				"location_au",
 				"app/views/shared/_location_autocomplete.erb"
 			],
@@ -1804,22 +1856,6 @@
 			[
 				"contacts/_form",
 				"app/views/contacts/_form.html.erb"
-			],
-			[
-				"show.alt3",
-				"app/views/companies/show.alt3.html.erb"
-			],
-			[
-				"search_wid",
-				"app/views/shared/_search_widget.alt1.html.erb"
-			],
-			[
-				"search_wide",
-				"app/views/shared/_search_widget.html.erb"
-			],
-			[
-				"visit",
-				"app/views/traffic/custom_property_mails/_visitor_form.html.erb"
 			]
 		],
 		"width": 0.0
