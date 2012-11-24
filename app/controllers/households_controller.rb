@@ -27,7 +27,7 @@ class HouseholdsController < ApplicationController
     @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
       f.options[:chart][:defaultSeriesType] = current_user.chart_type
       f.series( name: 'First', 
-                data: Household.first.get_readings_for(@start_time, @end_time, @unit)
+                data: Household.first.get_readings_for(params[:type], @start_time, @end_time, @unit)
       )
       # f.series( name: 'Second', 
       #           data: Household.last.get_readings_for(@start_time, @end_time, @unit)

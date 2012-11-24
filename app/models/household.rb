@@ -2,8 +2,9 @@ class Household < ActiveRecord::Base
   has_many :users
   has_many :energy_records
 
-  def get_readings_for(from, to, unit="day")
-    @readings = self.energy_records.where("period_end >= ? AND period_end < ?", from, to + 1.day).order("period_end")
+  def get_readings_for(energy, from, to, unit="day")
+    type = energy == "gas" ? "GasRecord" : "PowerRecord"
+    @readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", from, to + 1.day, type).order("period_end")
     # res = @readings.map{|r| r.usage}
     case unit
     when "hour"

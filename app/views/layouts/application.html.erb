@@ -14,8 +14,21 @@
         <a class="brand" href="#">Smart Energy</a>
         <ul class="nav">
           <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
+          <li><%= link_to "Gas", household_path(current_user.household,{type: "gas"}) %></li>
+          <li><%= link_to "Power", household_path(current_user.household, {type: "power"}) %></li>
+          <li><a href="#">C02</a></li>
+        </ul>
+        <ul class="nav pull-right">
+          <% if user_signed_in? %>
+            <li class="pull-right">
+            <%= link_to('Logout', destroy_user_session_path, 
+                                  :method => :delete) %>        
+            </li>
+          <% else %>
+            <li>
+            <%= link_to('Login', new_user_session_path)  %>  
+            </li>
+          <% end %>
         </ul>
       </div>
     </div>
