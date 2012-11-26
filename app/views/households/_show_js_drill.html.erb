@@ -1,0 +1,145 @@
+<%= javascript_tag do %>
+  $(function(){
+    function changeType(series, newType) {
+      var dataArray = [],
+          points = series.data;
+      series.chart.addSeries({
+          type: newType,
+          name: series.name,
+          color: series.color,
+          data: series.options.data,
+          pointInterval: series.pointInterval,
+          pointStart: series.xData[0]
+      }, false);
+      
+      series.remove();
+    }
+    $('#chart_type').change(function() {
+      for(i = 0, l = chart.series.length; i < l; ++i) {
+        var series = window.chart.series[0],
+            newType = $(this).val();
+        changeType(series, newType);
+      }
+    });
+    $('#chartType').change(function(){
+        chart.changeSeriesType(this.value);
+    });
+
+  var colors = Highcharts.getOptions().colors,
+      categories = <%= raw @data.map{|y| y["name"] } %>,
+      name = 'Usage',
+      level = 0,
+      data = <%= raw @data.to_json %>;
+   
+   function setChart(name, categories, data, color, level) {
+      chart.xAxis[0].setCategories(categories);
+      chart.series[0].remove();
+       
+       
+      chart.addSeries({
+         name: name,
+         data: data,
+         level: level
+      });
+   }
+   
+   chart = new Highcharts.Chart({
+      chart: {
+         renderTo: 'chart_container', 
+         type: 'column'
+      },
+      title: {
+         text: '<%= @type.capitalize %> usage for the year'
+      },
+      subtitle: {
+         text: 'Click on a column to view monthly usage. Click again to view daily usage.'
+      },
+      xAxis: {
+        labels: {
+          rotation: -60,
+          align: "right",
+          style: {
+              fontSize: "13px",
+              fontFamily: "Verdana, sans-serif"
+          }
+        },
+        gridLineColor: "#bfbfc0",
+        gridLineDashStyle: "ShortDash",
+        gridLineWidth: "1",
+        categories: categories                     
+      },
+      yAxis: {
+         title: {
+            text: 'watts'
+         }
+      },
+      plotOptions: {
+         column: {
+            cursor: 'pointer',
+            point: {
+               events: {
+                  click: function() {
+
+                     var drilldown = this.drilldown;
+                     if (drilldown) { // drill down
+                         
+                         this.series.chart.setTitle({
+                             text: drilldown.name
+                         });
+                     
+                         setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color, drilldown.level);
+                     } else { // restore
+                        setChart(name, categories, data, null, level);
+                     }
+                  }
+               }
+            }
+            // dataLabels: {
+            //    enabled: true,
+            //    color: colors[0],
+            //    style: {
+            //       fontWeight: 'bold'
+            //    },
+            //    formatter: function() {
+            //       return this.y +'%';
+            //    }
+            // }               
+         }
+      },
+      tooltip: {
+         formatter: function() {
+            var point = this.point, s = '';
+            
+             switch (this.series.options.level) {
+                case 0:
+                    s = 'LEVEL ONE<br/>';
+                    s += ' INSTRUCTIONS HERE 111';
+                    break;
+                
+                case 1:
+                    s = 'LEVEL TWO INSTRUCTIONS HERE <br/>';
+                    s += ' INSTRUCTIONS HERE 222';
+                    break;
+                
+                case 2:
+                    s = 'LEVEL THREE INSTRUCTIONS HERE<br/>';
+                    s += 'INSTRUCTIONS HERE 333';
+                    break;
+             }
+             
+             
+            return s;
+         }
+      },
+      series: [{
+         name: name,
+         level: level,
+         data: data
+      }],
+      exporting: {
+         enabled: false
+      }
+   });
+  })
+
+<% end %>

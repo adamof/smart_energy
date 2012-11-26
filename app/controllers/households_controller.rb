@@ -82,8 +82,8 @@ class HouseholdsController < ApplicationController
   end
 
   def gas_usage
-    @type = "gas"
-    chart
+    @type = "power"
+    chart_drill
   end
 
   def power_usage
@@ -97,6 +97,15 @@ class HouseholdsController < ApplicationController
     respond_to do |format|
       format.html { render :chart}
       format.js { render "chart.js" }
+    end
+  end
+
+  def chart_drill
+    @household = Household.find(params[:id])
+    @data = @household.all_readings("power")
+
+    respond_to do |format|
+      format.html { render :chart_drill}
     end
   end
 
@@ -128,6 +137,5 @@ class HouseholdsController < ApplicationController
 
     calculate_ticks
     # @data = @household.get_readings_for(@type, @start_time, @end_time, @unit, false)
-    @data = @household.all_readings("power")
   end
 end

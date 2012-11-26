@@ -1,0 +1,10 @@
+  <div class="span12">
+    <div id="chart_container">
+    </div>
+    <%= select  "chart", 
+                "type", 
+                CHART_TYPES, 
+                selected: current_user.chart_type %>
+  </div>
+</div>
+<%= render partial: "show_js_drill.html.erb" %>
