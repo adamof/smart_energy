@@ -1,25 +1,69 @@
 <div class="row">
-  <div class="span10">
+  <div class="span6">
+    <%= form_tag @type=="gas" ? gas_usage_household_path : power_usage_household_path, method: :get do %>
+      From
+      <%= text_field "search", "date_from", 
+                              value: @start_time.to_date, 
+                              class: "day_picker input-small start_date" %>
+      To
+      <%= text_field "search", "date_to", 
+                              value: @end_time.to_date, 
+                              class: "day_picker input-small end_date" %>
+      <%= submit_tag "GO" %>
+    <% end %>
+  </div>
+  <div class="span6">
+    <%= form_tag @type=="gas" ? gas_usage_household_path : power_usage_household_path, method: :get, remote: true do %>
+      From
+      <%= text_field "search", "date_from", 
+                              value: @start_time.to_date, 
+                              class: "day_picker input-small start_date" %>
+      To
+      <%= text_field "search", "date_to", 
+                              value: @end_time.to_date, 
+                              class: "day_picker input-small end_date" %>
+      <%= submit_tag "Add" %>
+    <% end %>
+  </div>
+
+  <div class="span12">
     <div id="chart_container">
-      <%= high_chart("chart_container", @h) %>
     </div>
     <%= select  "chart", 
                 "type", 
                 CHART_TYPES, 
                 selected: current_user.chart_type %>
   </div>
-  <div class="span2">
-    <%= form_tag household_path, method: :get do %>
-      From
-      <%= text_field "search", "date_from", 
-                              value: @start_time.to_date, 
-                              class: "day_picker input-small" %>
-      To
-      <%= text_field "search", "date_to", 
-                              value: @end_time.to_date, 
-                              class: "day_picker input-small" %>
-      <%= submit_tag "GO" %>
-    <% end %>
-  </div>
 </div>
-<%= render partial: 'show_js.html.erb' %>
+<%= render partial: "show_js.html.erb" %>
+<%= javascript_tag do %>
+  $(function () {
+  chart = new Highcharts.Chart({
+    chart: { renderTo: "chart_container" },
+    title: { text: "Usage",
+             defaultSeriesType: "column" },
+    xAxis: { type: "datetime",
+              labels: {
+                rotation: -60,
+                align: "right",
+                style: {
+                    fontSize: "13px",
+                    fontFamily: "Verdana, sans-serif"
+                }
+              },
+              tickInterval: <%= @interval %>,
+              gridLineColor: "#bfbfc0",
+              gridLineDashStyle: "ShortDash",
+              gridLineWidth: "1" },
+    yAxis: {
+      title: { text: "watts" }
+    }, 
+    series: [{
+      name: "First", 
+      data: <%= @household.get_readings_for(@type, @start_time, @end_time, @unit, false) %>,
+      pointStart: <%= @start_time.to_time.to_i*1000 %>,
+      pointInterval: <%= @interval %>
+    }],
+  });
+});
+<% end %>

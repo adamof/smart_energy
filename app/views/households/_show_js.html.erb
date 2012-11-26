@@ -6,9 +6,14 @@
     $(".day_picker").datepicker({
       format: 'yyyy-mm-dd',
       autoclose: true
-    });//.on('changeDate', function(ev){
-    //   $(this).datepicker('hide');   
-    // });
+      // startView: 2
+    });
+    $("#search_date_from").datepicker().on('changeDate', function(ev){
+      var start = $(this).val();
+      $("#search_date_to")[0].value = start;
+      $("#search_date_to").datepicker("setStartDate", start);
+      $("#search_date_to").datepicker("update");
+    });
     function changeType(series, newType) {
       var dataArray = [],
           points = series.data;

@@ -10,57 +10,6 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  def gas_usage
-    @type = "gas"
-    generate_chart
-    render :chart
-  end
-
-  def power_usage
-    @type = "power"
-    generate_chart
-    render :chart
-  end
-
-  def chart
-  end
-
-  def generate_chart
-    @household = Household.find(params[:id])
-    if params[:search]
-      @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
-      @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d")
-    else
-      @start_time = EnergyRecord.first.period_end.to_date
-      @end_time = @start_time + 7.days
-    end
-
-    calculate_ticks
-
-    @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
-      f.options[:chart][:defaultSeriesType] = current_user.chart_type
-      f.series( name: 'First', 
-                data: @household.get_readings_for(@type, @start_time, @end_time, @unit)
-      )
-      # f.series( name: 'Second', 
-      #           data: Household.last.get_readings_for(@start_time, @end_time, @unit)
-      # )
-      f.xAxis(type: :datetime,
-              labels: {
-                rotation: -60,
-                align: 'right',
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-              },
-              tickInterval: @interval,
-              gridLineColor: '#bfbfc0',
-              gridLineDashStyle: 'ShortDash',
-              gridLineWidth: '1')
-      f.options[:title][:text] = "lala"
-    end
-  end
   # GET /households/1
   # GET /households/1.json
   def show
@@ -70,10 +19,6 @@ class HouseholdsController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @household }
     end
-  end
-
-  def change
-    
   end
 
   # GET /households/new
@@ -136,6 +81,25 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  def gas_usage
+    @type = "gas"
+    chart
+  end
+
+  def power_usage
+    @type = "power"
+    chart
+  end
+
+  def chart
+    generate_chart
+
+    respond_to do |format|
+      format.html { render :chart}
+      format.js { render "chart.js" }
+    end
+  end
+
   private
 
   def calculate_ticks
@@ -149,6 +113,42 @@ class HouseholdsController < ApplicationController
     else
       @unit = "week"
       @interval = 7*24*3600*1000
+    end
+  end
+
+  def generate_chart
+    @household = Household.find(params[:id])
+    if params[:search]
+      @start_time = DateTime.strptime(params[:search][:date_from], "%Y-%m-%d")
+      @end_time = DateTime.strptime(params[:search][:date_to], "%Y-%m-%d")
+    else
+      @start_time = EnergyRecord.first.period_end.to_date
+      @end_time = @start_time + 7.days
+    end
+
+    calculate_ticks
+
+    @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
+      f.options[:chart][:defaultSeriesType] = current_user.chart_type
+      f.series( name: 'First', 
+                data: @household.get_readings_for(@type, @start_time, @end_time, @unit, false),
+                pointStart: @start_time.to_time.to_i*1000,
+                pointInterval: @interval
+      )
+      f.xAxis(type: :datetime,
+              labels: {
+                rotation: -60,
+                align: 'right',
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+              },
+              tickInterval: @interval,
+              gridLineColor: '#bfbfc0',
+              gridLineDashStyle: 'ShortDash',
+              gridLineWidth: '1')
+      f.options[:title][:text] = "lala"
     end
   end
 end

@@ -4,9 +4,61 @@
     <ul>
       <li>
         <%= link_to "Power usage", power_usage_household_path(current_user.household) %>
+        <ul>
+          <li>
+            <%= link_to "For yesterday", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-02-28"
+              }
+            }) %>
+          </li>
+          <li>
+            <%= link_to "For last week", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-03-07"
+              }
+            }) %>
+          </li>
+          <li>
+            <%= link_to "For last month", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-03-28"
+              }
+            }) %>
+          </li>
+        </ul>
       </li>
       <li>
         <%= link_to "Gas usage", gas_usage_household_path(current_user.household) %>
+        <ul>
+          <li>
+            <%= link_to "For yesterday", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-02-28"
+              }
+            }) %>
+          </li>
+          <li>
+            <%= link_to "For last week", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-03-07"
+              }
+            }) %>
+          </li>
+          <li>
+            <%= link_to "For last month", power_usage_household_path(current_user.household, {
+              search: {
+                date_from: "2011-02-28",
+                date_to:   "2011-03-28"
+              }
+            }) %>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
