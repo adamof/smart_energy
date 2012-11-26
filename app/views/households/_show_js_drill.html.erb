@@ -25,7 +25,7 @@
         chart.changeSeriesType(this.value);
     });
 
-  var colors = Highcharts.getOptions().colors,
+  var chartTitle = 'Yearly <%= @type %> usage',
       categories = <%= raw @data.map{|y| y["name"] } %>,
       name = 'Usage',
       level = 0,
@@ -34,7 +34,6 @@
    function setChart(name, categories, data, color, level) {
       chart.xAxis[0].setCategories(categories);
       chart.series[0].remove();
-       
        
       chart.addSeries({
          name: name,
@@ -49,7 +48,7 @@
          type: 'column'
       },
       title: {
-         text: '<%= @type.capitalize %> usage for the year'
+         text: chartTitle
       },
       subtitle: {
          text: 'Click on a column to view monthly usage. Click again to view daily usage.'
@@ -89,6 +88,9 @@
                      
                          setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color, drilldown.level);
                      } else { // restore
+                        this.series.chart.setTitle({
+                           text: chartTitle
+                         });
                         setChart(name, categories, data, null, level);
                      }
                   }
@@ -106,31 +108,31 @@
             // }               
          }
       },
-      tooltip: {
-         formatter: function() {
-            var point = this.point, s = '';
+      // tooltip: {
+      //    formatter: function() {
+      //       var point = this.point, s = '';
             
-             switch (this.series.options.level) {
-                case 0:
-                    s = 'LEVEL ONE<br/>';
-                    s += ' INSTRUCTIONS HERE 111';
-                    break;
+      //        switch (this.series.options.level) {
+      //           case 0:
+      //               s = 'LEVEL ONE<br/>';
+      //               s += ' INSTRUCTIONS HERE 111';
+      //               break;
                 
-                case 1:
-                    s = 'LEVEL TWO INSTRUCTIONS HERE <br/>';
-                    s += ' INSTRUCTIONS HERE 222';
-                    break;
+      //           case 1:
+      //               s = 'LEVEL TWO INSTRUCTIONS HERE <br/>';
+      //               s += ' INSTRUCTIONS HERE 222';
+      //               break;
                 
-                case 2:
-                    s = 'LEVEL THREE INSTRUCTIONS HERE<br/>';
-                    s += 'INSTRUCTIONS HERE 333';
-                    break;
-             }
+      //           case 2:
+      //               s = 'LEVEL THREE INSTRUCTIONS HERE<br/>';
+      //               s += 'INSTRUCTIONS HERE 333';
+      //               break;
+      //        }
              
              
-            return s;
-         }
-      },
+      //       return s;
+      //    }
+      // },
       series: [{
          name: name,
          level: level,
