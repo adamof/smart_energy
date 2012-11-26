@@ -1,5 +1,5 @@
 chart.addSeries({
-  name: "Period2",
+  name: "Period 2",
   data: <%= @household.get_readings_for(@type, @start_time, @end_time, @unit, false) %>,
   pointStart: chart.series[0].xData[0],// <%= @start_time.to_time.to_i*1000 %>
   pointInterval: <%= @interval %>

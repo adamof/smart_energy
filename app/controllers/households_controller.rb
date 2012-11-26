@@ -127,28 +127,7 @@ class HouseholdsController < ApplicationController
     end
 
     calculate_ticks
-
-    @h = LazyHighCharts::HighChart.new('graph', style: '') do |f|
-      f.options[:chart][:defaultSeriesType] = current_user.chart_type
-      f.series( name: 'First', 
-                data: @household.get_readings_for(@type, @start_time, @end_time, @unit, false),
-                pointStart: @start_time.to_time.to_i*1000,
-                pointInterval: @interval
-      )
-      f.xAxis(type: :datetime,
-              labels: {
-                rotation: -60,
-                align: 'right',
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-              },
-              tickInterval: @interval,
-              gridLineColor: '#bfbfc0',
-              gridLineDashStyle: 'ShortDash',
-              gridLineWidth: '1')
-      f.options[:title][:text] = "lala"
-    end
+    # @data = @household.get_readings_for(@type, @start_time, @end_time, @unit, false)
+    @data = @household.all_readings("power")
   end
 end
