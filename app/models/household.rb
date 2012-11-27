@@ -44,17 +44,8 @@ class Household < ActiveRecord::Base
       result[year]["drilldown"][month]["drilldown"][day]["drilldown"][hour] = usage
     end
     return format_result result
-
-    # years = readings.group_by{|r| r.period_end.beginning_of_year}
-    # years.each do |year|
-    #   months = year.values.group_by{|r| r.period_end.beginning_of_month}
-    #   months.each
-    #   result[year.strftime("%Y")]=year.
-
-    # end
-    # .keys.map{|y| y.strftime("%Y")}
-
   end
+
   def format_result(result)
     data = []
     result.each do |year, v1|

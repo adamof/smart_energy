@@ -1,5 +1,6 @@
 <%= javascript_tag do %>
   $(function(){
+    chartType = "<%= current_user.chart_type %>";
     function changeType(series, newType) {
       var dataArray = [],
           points = series.data;
@@ -15,9 +16,10 @@
       series.remove();
     }
     $('#chart_type').change(function() {
+      chartType = $(this).val();
       for(i = 0, l = chart.series.length; i < l; ++i) {
         var series = window.chart.series[0],
-            newType = $(this).val();
+            newType = chartType;
         changeType(series, newType);
       }
     });
@@ -25,27 +27,30 @@
         chart.changeSeriesType(this.value);
     });
 
-  var chartTitle = 'Yearly <%= @type %> usage',
+  var colors = Highcharts.getOptions().colors,
+      chartTitle = 'Yearly <%= @type %> usage',
       categories = <%= raw @data.map{|y| y["name"] } %>,
       name = 'Usage',
       level = 0,
       data = <%= raw @data.to_json %>;
    
-   function setChart(name, categories, data, color, level) {
+   function setChart(name, categories, data, color, level, type) {
       chart.xAxis[0].setCategories(categories);
       chart.series[0].remove();
        
       chart.addSeries({
          name: name,
          data: data,
-         level: level
+         level: level,
+         color: color,
+         type: type
       });
    }
    
    chart = new Highcharts.Chart({
       chart: {
          renderTo: 'chart_container', 
-         type: 'column'
+         type: chartType
       },
       title: {
          text: chartTitle
@@ -73,7 +78,7 @@
          }
       },
       plotOptions: {
-         column: {
+         series: {
             cursor: 'pointer',
             point: {
                events: {
@@ -86,15 +91,18 @@
                              text: drilldown.name
                          });
                      
-                         setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color, drilldown.level);
+                         setChart(drilldown.name, drilldown.categories, drilldown.data, colors[drilldown.level], drilldown.level, chartType);
                      } else { // restore
                         this.series.chart.setTitle({
                            text: chartTitle
                          });
-                        setChart(name, categories, data, null, level);
+                        setChart(name, categories, data, colors[0], level, chartType);
                      }
                   }
                }
+            },
+            marker: {
+              symbol: "circle"
             }
             // dataLabels: {
             //    enabled: true,
@@ -136,7 +144,8 @@
       series: [{
          name: name,
          level: level,
-         data: data
+         data: data,
+         color: colors[0]
       }],
       exporting: {
          enabled: false
