@@ -8,39 +8,41 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="brand" href="#">Smart Energy</a>
-        <ul class="nav">
-          <li class="<%= 'active' if current_page?(household_path) %>">
-            <%= link_to "Dashboard", household_path(current_user.household) %>
-          </li>
-          <li class="<%= 'active' if current_page?(power_usage_household_path) %>">
-            <%= link_to "Power", power_usage_household_path(current_user.household) %>
-          </li>
-          <li class="<%= 'active' if current_page?(gas_usage_household_path) %>">
-            <%= link_to "Gas", gas_usage_household_path(current_user.household) %>
-          </li>
-          <li>
-            <a href="#">C02</a>
-          </li>
-        </ul>
-        <ul class="nav pull-right">
-          <% if user_signed_in? %>
-            <li class="pull-right">
-            <%= link_to('Logout', destroy_user_session_path, 
-                                  :method => :delete) %>        
+  <% if current_user %>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Smart Energy</a>
+          <ul class="nav">
+            <li class="<%= 'active' if current_page?(household_path((current_user.household))) %>">
+              <%= link_to "Dashboard", household_path(current_user.household) %>
             </li>
-          <% else %>
+            <li class="<%= 'active' if current_page?(power_usage_household_path((current_user.household))) %>">
+              <%= link_to "Power", power_usage_household_path(current_user.household) %>
+            </li>
+            <li class="<%= 'active' if current_page?(gas_usage_household_path(current_user.household)) %>">
+              <%= link_to "Gas", gas_usage_household_path(current_user.household) %>
+            </li>
             <li>
-            <%= link_to('Login', new_user_session_path)  %>  
+              <a href="#">C02</a>
             </li>
-          <% end %>
-        </ul>
+          </ul>
+          <ul class="nav pull-right">
+            <% if user_signed_in? %>
+              <li class="pull-right">
+              <%= link_to('Logout', destroy_user_session_path, 
+                                    :method => :delete) %>        
+              </li>
+            <% else %>
+              <li>
+              <%= link_to('Login', new_user_session_path)  %>  
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
   <div class="container">
     <p class="notice"><%= notice %></p>
     <% if alert %>

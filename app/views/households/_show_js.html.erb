@@ -5,8 +5,9 @@
     // var fromField = $("#date_from");
     $(".day_picker").datepicker({
       format: 'yyyy-mm-dd',
-      autoclose: true
-      // startView: 2
+      autoclose: true,
+      weekStart: 1,
+      startView: 2
     });
     $("#search_date_from").datepicker().on('changeDate', function(ev){
       var start = $(this).val();
