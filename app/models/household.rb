@@ -6,19 +6,76 @@ class Household < ActiveRecord::Base
     type = energy == "gas" ? "GasRecord" : "PowerRecord"
     readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", from, to + 1.day, type).order("period_end")
     # res = readings.map{|r| r.usage}
-    case unit
+    time_unit = case unit
     when "hour"
-      time_unit = :beginning_of_hour
+      :beginning_of_hour
     when "day"
-      time_unit = :beginning_of_day
+      :beginning_of_day
     when "week"
-      time_unit = :beginning_of_week
+      :beginning_of_week
+    when "month"
+      :beginning_of_month
     end
     if with_date
       return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum.round(2)]}
     else
       return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| v.map{|r| r.usage}.sum.round(2)}
     end
+  end
+
+  def readings(energy, date, unit)
+    result = { categories: [], data: [] }
+    categories = []
+    data = []
+    type = energy == "gas" ? "GasRecord" : "PowerRecord"
+
+    if unit=="all"
+      readings = self.energy_records.where("type = ?", type).order("period_end")
+    else
+      readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", date, date + 1.send(unit), type).order("period_end")
+    end
+
+    case unit
+    when "day"
+      name = date.strftime("%d")
+      group = :beginning_of_hour
+      frmt_time = "%H:%M"
+      child_unit = "hour"
+      level = 3
+    when "month"
+      name = date.strftime("%B")
+      group = :beginning_of_day
+      frmt_time = "%d"
+      child_unit = "day"
+      level = 2
+    when "year"
+      name = date.strftime("%Y")
+      group = :beginning_of_month
+      frmt_time = "%B"
+      child_unit = "month"
+      level = 1
+    else
+      name = "All time usage"
+      group = :beginning_of_year
+      frmt_time = "%Y"
+      child_unit = "year"
+      level = 0
+    end
+
+    readings.group_by{ |u| u.period_end.send(group) }.each do |period, usage|
+      categories << period.strftime(frmt_time)
+      data << { y: usage.map{|r| r.usage}.sum.round(2),
+                date: period.strftime("%F"),
+                unit: child_unit,
+                level: level-1 }
+    end
+
+    return {
+      name: name,
+      data: data,
+      categories: categories,
+      level: level
+    }    
   end
 
   def all_readings(energy)
@@ -57,21 +114,21 @@ class Household < ActiveRecord::Base
       drilldown["categories"] = year["drilldown"].keys
       drilldown["level"] = 1
       drilldown["data"] = [] #??
-      year["drilldown"].each do |month, v2|
+      year["drilldown"].each do |_month, month|
         drilldown2 = {}
-        drilldown2["name"] = v2["name"]
-        drilldown2["categories"] = v2["drilldown"].keys
+        drilldown2["name"] = month["name"]
+        drilldown2["categories"] = month["drilldown"].keys
         drilldown2["level"] = 2
         drilldown2["data"] = []
-        v2["drilldown"].each do |day, v3|
+        month["drilldown"].each do |_day, day|
           drilldown3 = {}
-          drilldown3["name"] = v3["name"]
-          drilldown3["categories"] = v3["drilldown"].keys
+          drilldown3["name"] = day["name"]
+          drilldown3["categories"] = day["drilldown"].keys
           drilldown3["level"] = 3
-          drilldown3["data"] = v3["drilldown"].values
-          drilldown2["data"] << {"y" => v3["y"], "drilldown" => drilldown3}
+          drilldown3["data"] = day["drilldown"].values
+          drilldown2["data"] << {"y" => day["y"], "drilldown" => drilldown3}
         end
-        drilldown["data"] << {"y" => v2["y"], "drilldown" => drilldown2}
+        drilldown["data"] << {"y" => month["y"], "drilldown" => drilldown2}
       end
       year["drilldown"] = drilldown
     end

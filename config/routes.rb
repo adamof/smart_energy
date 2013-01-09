@@ -3,6 +3,7 @@ SmartEnergy::Application.routes.draw do
     member do
       get "gas_usage", as: :gas_usage
       get "power_usage", as: :power_usage
+      get "readings", as: :readings
     end
   end
 

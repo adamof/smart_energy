@@ -102,11 +102,18 @@ class HouseholdsController < ApplicationController
 
   def chart_drill
     @household = Household.find(params[:id])
-    @data = @household.all_readings("power")
+    @data = @household.readings("pwr", nil, "all")
 
     respond_to do |format|
       format.html { render :chart_drill}
     end
+  end
+
+  def readings
+    @household = Household.find(params[:id])
+    @data = @household.readings("pwr", Date.strptime(params[:date], "%F"), params[:unit])
+
+    render json: @data.to_json
   end
 
   private

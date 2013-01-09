@@ -11,7 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121124153220) do
+ActiveRecord::Schema.define(:version => 20130106162906) do
+
+  create_table "carbon_intensities", :force => true do |t|
+    t.datetime "period"
+    t.float    "value"
+  end
 
   create_table "energy_records", :force => true do |t|
     t.integer  "household_id"

@@ -24,24 +24,24 @@
       }
     });
     $('#chartType').change(function(){
-        chart.changeSeriesType(this.value);
+      chart.changeSeriesType(this.value);
     });
 
   var colors = Highcharts.getOptions().colors,
       chartTitle = 'Yearly <%= @type %> usage',
-      categories = <%= raw @data.map{|y| y["name"] } %>,
-      name = 'Usage',
-      level = 0,
-      data = <%= raw @data.to_json %>;
+      categories = <%= raw @data[:categories] %>,
+      name = '<%= raw @data[:name] %>',
+      level = <%= raw @data[:level] %>,
+      data = <%= raw @data[:data].to_json %>;
    
-   function setChart(name, categories, data, color, level, type) {
-      chart.xAxis[0].setCategories(categories);
+   function setChart(drilldown, color, type) {
+      chart.xAxis[0].setCategories(drilldown.categories);
       chart.series[0].remove();
-       
+
       chart.addSeries({
-         name: name,
-         data: data,
-         level: level,
+         name: drilldown.name,
+         data: drilldown.data,
+         level: drilldown.level,
          color: color,
          type: type
       });
@@ -83,21 +83,38 @@
             point: {
                events: {
                   click: function() {
+                    // console.log(this);
+                    // console.log(this.category);
+                    // console.log(this.options);
+                    // console.log(this.y);
+                    // console.log(this.x);
 
-                     var drilldown = this.drilldown;
-                     if (drilldown) { // drill down
-                         
-                         this.series.chart.setTitle({
-                             text: drilldown.name
-                         });
-                     
-                         setChart(drilldown.name, drilldown.categories, drilldown.data, colors[drilldown.level], drilldown.level, chartType);
-                     } else { // restore
-                        this.series.chart.setTitle({
-                           text: chartTitle
-                         });
-                        setChart(name, categories, data, colors[0], level, chartType);
-                     }
+                    $.getJSON("<%= readings_household_path %>", 
+                      { date: this.date,
+                        unit: this.unit,
+                        id: <%= @household.id %> }, 
+                      function(drilldown) {
+                        if (this.level!=3) { // drill down
+                          
+                          chart.setTitle({
+                            text: drilldown.name
+                          });
+
+                          setChart(drilldown, colors[drilldown.level], chartType);
+                        } else { // restore
+                            chart.setTitle({
+                              text: chartTitle
+                            });
+                            setChart({
+                              name: name, 
+                              categories: categories, 
+                              data: data, 
+                              level: level
+                            }, colors[0], chartType);
+                        }
+                    });
+
+                    var drilldown = this.drilldown;
                   }
                }
             },
