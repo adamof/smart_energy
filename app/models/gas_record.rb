@@ -1,3 +1,3 @@
-class GasRecord < EnergyRecord
+class GasRecord < Record
   
 end

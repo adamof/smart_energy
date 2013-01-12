@@ -1,0 +1,3 @@
+class CarbonRecord < Record
+  
+end

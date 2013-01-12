@@ -32,11 +32,14 @@
       categories = <%= raw @data[:categories] %>,
       name = '<%= raw @data[:name] %>',
       level = <%= raw @data[:level] %>,
-      data = <%= raw @data[:data].to_json %>;
+      data = <%= raw @data[:data].to_json %>,
+      default_units = '<%= raw @data[:units] %>';
    
    function setChart(drilldown, color, type) {
       chart.xAxis[0].setCategories(drilldown.categories);
       chart.series[0].remove();
+
+      chart.yAxis[0].setTitle({text: drilldown.units});
 
       chart.addSeries({
          name: drilldown.name,
@@ -73,9 +76,9 @@
         categories: categories                     
       },
       yAxis: {
-         title: {
-            text: 'watts'
-         }
+        title: {
+          text: default_units
+        }
       },
       plotOptions: {
          series: {
@@ -109,7 +112,8 @@
                               name: name, 
                               categories: categories, 
                               data: data, 
-                              level: level
+                              level: level,
+                              units: default_units
                             }, colors[0], chartType);
                         }
                     });

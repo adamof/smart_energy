@@ -1,6 +1,7 @@
 class Household < ActiveRecord::Base
   has_many :users
-  has_many :energy_records
+  has_many :power_records
+  has_many :gas_records
 
   def get_readings_for(energy, from, to, unit="day", with_date = true)
     type = energy == "gas" ? "GasRecord" : "PowerRecord"
@@ -27,50 +28,59 @@ class Household < ActiveRecord::Base
     result = { categories: [], data: [] }
     categories = []
     data = []
-    type = energy == "gas" ? "GasRecord" : "PowerRecord"
+    type = energy == "gas" ? "gas_records" : "power_records"
 
     if unit=="all"
-      readings = self.energy_records.where("type = ?", type).order("period_end")
+      readings = self.send(type).order("period_end")
     else
-      readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", date, date + 1.send(unit), type).order("period_end")
+      readings = self.send(type).where("period_end >= ? AND period_end < ?", date, date + 1.send(unit)).order("period_end")
     end
 
     case unit
     when "day"
-      name = date.strftime("%d")
+      name = date.strftime("%d %B")
       group = :beginning_of_hour
       frmt_time = "%H:%M"
-      child_unit = "hour"
+      child_unit = "all"
       level = 3
+      units = "watt-hours"
+      unit_divider = 1
     when "month"
       name = date.strftime("%B")
       group = :beginning_of_day
       frmt_time = "%d"
       child_unit = "day"
       level = 2
+      units = "kilowatt-hours"
+      unit_divider = 1000
     when "year"
       name = date.strftime("%Y")
       group = :beginning_of_month
       frmt_time = "%B"
       child_unit = "month"
       level = 1
+      units = "kilowatt-hours"
+      unit_divider = 1000
     else
       name = "All time usage"
       group = :beginning_of_year
       frmt_time = "%Y"
       child_unit = "year"
       level = 0
+      units = "megawatt-hours"
+      unit_divider = 1000000
     end
 
     readings.group_by{ |u| u.period_end.send(group) }.each do |period, usage|
       categories << period.strftime(frmt_time)
-      data << { y: usage.map{|r| r.usage}.sum.round(2),
+      data << { y: usage.map{|r| r.usage}.sum.round(2)/unit_divider,
                 date: period.strftime("%F"),
                 unit: child_unit,
                 level: level-1 }
     end
 
     return {
+      units: units,
       name: name,
       data: data,
       categories: categories,
@@ -133,4 +143,18 @@ class Household < ActiveRecord::Base
       year["drilldown"] = drilldown
     end
   end
+
+  private
+
+  # def measuring_units(max, type)
+  #   case type
+  #   when "energy_records"
+  #     if max > 
+  #   when "gas_records"
+
+  #   when "carbon_records"
+      
+  #   end
+      
+  # end
 end

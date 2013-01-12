@@ -1,3 +1,3 @@
-class PowerRecord < EnergyRecord
+class PowerRecord < Record
   
 end
