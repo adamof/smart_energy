@@ -86,12 +86,6 @@
             point: {
                events: {
                   click: function() {
-                    // console.log(this);
-                    // console.log(this.category);
-                    // console.log(this.options);
-                    // console.log(this.y);
-                    // console.log(this.x);
-
                     $.getJSON("<%= readings_household_path %>", 
                       { date: this.date,
                         unit: this.unit,

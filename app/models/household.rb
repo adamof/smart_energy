@@ -3,43 +3,15 @@ class Household < ActiveRecord::Base
   has_many :power_records
   has_many :gas_records
 
-  def get_readings_for(energy, from, to, unit="day", with_date = true)
-    type = energy == "gas" ? "GasRecord" : "PowerRecord"
-    readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", from, to + 1.day, type).order("period_end")
-    # res = readings.map{|r| r.usage}
-    time_unit = case unit
-    when "hour"
-      :beginning_of_hour
-    when "day"
-      :beginning_of_day
-    when "week"
-      :beginning_of_week
-    when "month"
-      :beginning_of_month
-    end
-    if with_date
-      return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum.round(2)]}
-    else
-      return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| v.map{|r| r.usage}.sum.round(2)}
-    end
-  end
-
   def readings(energy, date, unit)
-    result = { categories: [], data: [] }
     categories = []
     data = []
     type = energy == "gas" ? "gas_records" : "power_records"
 
-    if unit=="all"
-      readings = self.send(type).order("period_end")
-    else
-      readings = self.send(type).where("period_end >= ? AND period_end < ?", date, date + 1.send(unit)).order("period_end")
-    end
-
     case unit
     when "day"
       name = date.strftime("%d %B")
-      group = :beginning_of_hour
+      group = "hour"
       frmt_time = "%H:%M"
       child_unit = "all"
       level = 3
@@ -47,7 +19,7 @@ class Household < ActiveRecord::Base
       unit_divider = 1
     when "month"
       name = date.strftime("%B")
-      group = :beginning_of_day
+      group = "date"
       frmt_time = "%d"
       child_unit = "day"
       level = 2
@@ -55,7 +27,7 @@ class Household < ActiveRecord::Base
       unit_divider = 1000
     when "year"
       name = date.strftime("%Y")
-      group = :beginning_of_month
+      group = "month"
       frmt_time = "%B"
       child_unit = "month"
       level = 1
@@ -63,7 +35,7 @@ class Household < ActiveRecord::Base
       unit_divider = 1000
     else
       name = "All time usage"
-      group = :beginning_of_year
+      group = "year"
       frmt_time = "%Y"
       child_unit = "year"
       level = 0
@@ -71,10 +43,17 @@ class Household < ActiveRecord::Base
       unit_divider = 1000000
     end
 
-    readings.group_by{ |u| u.period_end.send(group) }.each do |period, usage|
-      categories << period.strftime(frmt_time)
-      data << { y: usage.map{|r| r.usage}.sum.round(2)/unit_divider,
-                date: period.strftime("%F"),
+    if unit=="all"
+      readings = self.send(type).aggregate_records(group)
+    else
+      readings = self.send(type).within(date, unit).aggregate_records(group)
+    end
+
+
+    readings.each do |record|
+      categories << record["date"].strftime(frmt_time)
+      data << { date: record["date"].strftime("%F"),
+                y: (record["y"]/unit_divider).round(2),
                 unit: child_unit,
                 level: level-1 }
     end
@@ -88,63 +67,82 @@ class Household < ActiveRecord::Base
     }    
   end
 
-  def all_readings(energy)
-    result = {}
-    type = energy == "gas" ? "GasRecord" : "PowerRecord"
-    readings = self.energy_records.where("type = ?", type).order("period_end")
+  # def get_readings_for(energy, from, to, unit="day", with_date = true)
+  #   type = energy == "gas" ? "GasRecord" : "PowerRecord"
+  #   readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", from, to + 1.day, type).order("period_end")
+  #   # res = readings.map{|r| r.usage}
+  #   time_unit = case unit
+  #   when "hour"
+  #     :beginning_of_hour
+  #   when "day"
+  #     :beginning_of_day
+  #   when "week"
+  #     :beginning_of_week
+  #   when "month"
+  #     :beginning_of_month
+  #   end
+  #   if with_date
+  #     return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum.round(2)]}
+  #   else
+  #     return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| v.map{|r| r.usage}.sum.round(2)}
+  #   end
+  # end
 
-    readings.each do |reading|
-      year = reading.period_end.strftime("%Y")
-      month = reading.period_end.strftime("%B")
-      day = reading.period_end.strftime("%d")
-      hour = reading.period_end.strftime("%H:%M")
-      usage = reading.usage
+  # def all_readings(energy)
+  #   result = {}
+  #   type = energy == "gas" ? "GasRecord" : "PowerRecord"
+  #   readings = self.energy_records.where("type = ?", type).order("period_end")
 
-      result[year] = result[year] || {"name" => year, "y" => 0, "drilldown" => {}}
-      result[year]["drilldown"][month] = result[year]["drilldown"][month] || {"name" => "#{month} #{year}", "y" => 0, "drilldown" => {}}
-      result[year]["drilldown"][month]["drilldown"][day] = result[year]["drilldown"][month]["drilldown"][day] || {"name" => "#{day} #{month} #{year}", "y" => 0, "drilldown" => {}}
+  #   readings.each do |reading|
+  #     year = reading.period_end.strftime("%Y")
+  #     month = reading.period_end.strftime("%B")
+  #     day = reading.period_end.strftime("%d")
+  #     hour = reading.period_end.strftime("%H:%M")
+  #     usage = reading.usage
+
+  #     result[year] = result[year] || {"name" => year, "y" => 0, "drilldown" => {}}
+  #     result[year]["drilldown"][month] = result[year]["drilldown"][month] || {"name" => "#{month} #{year}", "y" => 0, "drilldown" => {}}
+  #     result[year]["drilldown"][month]["drilldown"][day] = result[year]["drilldown"][month]["drilldown"][day] || {"name" => "#{day} #{month} #{year}", "y" => 0, "drilldown" => {}}
       
-      result[year]["y"] += usage
-      result[year]["drilldown"][month]["y"] += usage
-      result[year]["drilldown"][month]["drilldown"][day]["y"] += usage
+  #     result[year]["y"] += usage
+  #     result[year]["drilldown"][month]["y"] += usage
+  #     result[year]["drilldown"][month]["drilldown"][day]["y"] += usage
 
-      result[year]["drilldown"][month]["drilldown"][day]["drilldown"][hour] = usage
-    end
-    return format_result result
-  end
+  #     result[year]["drilldown"][month]["drilldown"][day]["drilldown"][hour] = usage
+  #   end
+  #   return format_result result
+  # end
 
-  def format_result(result)
-    data = []
-    result.each do |year, v1|
-      data << v1
-    end
-    data.each do |year|
-      drilldown = {}
-      drilldown["name"] = year["name"]
-      drilldown["categories"] = year["drilldown"].keys
-      drilldown["level"] = 1
-      drilldown["data"] = [] #??
-      year["drilldown"].each do |_month, month|
-        drilldown2 = {}
-        drilldown2["name"] = month["name"]
-        drilldown2["categories"] = month["drilldown"].keys
-        drilldown2["level"] = 2
-        drilldown2["data"] = []
-        month["drilldown"].each do |_day, day|
-          drilldown3 = {}
-          drilldown3["name"] = day["name"]
-          drilldown3["categories"] = day["drilldown"].keys
-          drilldown3["level"] = 3
-          drilldown3["data"] = day["drilldown"].values
-          drilldown2["data"] << {"y" => day["y"], "drilldown" => drilldown3}
-        end
-        drilldown["data"] << {"y" => month["y"], "drilldown" => drilldown2}
-      end
-      year["drilldown"] = drilldown
-    end
-  end
-
-  private
+  # def format_result(result)
+  #   data = []
+  #   result.each do |year, v1|
+  #     data << v1
+  #   end
+  #   data.each do |year|
+  #     drilldown = {}
+  #     drilldown["name"] = year["name"]
+  #     drilldown["categories"] = year["drilldown"].keys
+  #     drilldown["level"] = 1
+  #     drilldown["data"] = [] #??
+  #     year["drilldown"].each do |_month, month|
+  #       drilldown2 = {}
+  #       drilldown2["name"] = month["name"]
+  #       drilldown2["categories"] = month["drilldown"].keys
+  #       drilldown2["level"] = 2
+  #       drilldown2["data"] = []
+  #       month["drilldown"].each do |_day, day|
+  #         drilldown3 = {}
+  #         drilldown3["name"] = day["name"]
+  #         drilldown3["categories"] = day["drilldown"].keys
+  #         drilldown3["level"] = 3
+  #         drilldown3["data"] = day["drilldown"].values
+  #         drilldown2["data"] << {"y" => day["y"], "drilldown" => drilldown3}
+  #       end
+  #       drilldown["data"] << {"y" => month["y"], "drilldown" => drilldown2}
+  #     end
+  #     year["drilldown"] = drilldown
+  #   end
+  # end
 
   # def measuring_units(max, type)
   #   case type
