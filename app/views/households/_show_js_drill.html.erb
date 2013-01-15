@@ -54,20 +54,20 @@
       data = <%= raw @data[:data].to_json %>,
       default_units = '<%= raw @data[:units] %>';
    
-   function setChart(drilldown, color, type) {
-      chart.xAxis[0].setCategories(drilldown.categories);
-      chart.series[0].remove();
+  function setChart(drilldown, color, type) {
+    chart.xAxis[0].setCategories(drilldown.categories);
+    chart.series[0].remove();
 
-      chart.yAxis[0].setTitle({text: drilldown.units});
+    chart.yAxis[0].setTitle({text: drilldown.units});
 
-      chart.addSeries({
-         name: drilldown.name,
-         data: drilldown.data,
-         level: drilldown.level,
-         color: color,
-         type: type
-      });
-   }
+    chart.addSeries({
+      name: drilldown.name,
+      data: drilldown.data,
+      level: drilldown.level,
+      color: color,
+      type: type
+    });
+  }
 
   function writePeriod (drilldown) {
     $(".period-shown #unit").val(drilldown.unit);
@@ -77,14 +77,14 @@
    
    chart = new Highcharts.Chart({
       chart: {
-         renderTo: 'chart_container', 
-         type: chartType
+        renderTo: 'chart_container', 
+        type: chartType
       },
       title: {
-         text: chartTitle
+        text: chartTitle
       },
       subtitle: {
-         text: 'Click on a column to view monthly usage. Click again to view daily usage.'
+        text: 'Click on a column to view monthly usage. Click again to view daily usage.'
       },
       xAxis: {
         labels: {
@@ -114,61 +114,61 @@
         }
       ],
       plotOptions: {
-         series: {
-            cursor: 'pointer',
-            point: {
-               events: {
-                  click: function() {
-                    writePeriod(this);
-                    // TODO check to see which toggles we have on
-                    // so that I can load them as well maybe in a single call?
-                    $.getJSON("<%= readings_household_path %>", 
-                      { date: this.date,
-                        unit: this.unit,
-                        type: this.type,
-                        axis: this.axis,
-                        id: <%= @household.id %> }, 
-                      function(drilldown) {
-                        if (this.level!=3) { // drill down
-                          
-                          chart.setTitle({
-                            text: drilldown.name
-                          });
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function() {
+                writePeriod(this);
+                // TODO check to see which toggles we have on
+                // so that I can load them as well maybe in a single call?
+                $.getJSON("<%= readings_household_path %>", 
+                  { date: this.date,
+                    unit: this.unit,
+                    type: this.type,
+                    axis: this.axis,
+                    id: <%= @household.id %> }, 
+                  function(drilldown) {
+                    if (this.level!=3) { // drill down
+                      
+                      chart.setTitle({
+                        text: drilldown.name
+                      });
 
-                          setChart(drilldown, colors[drilldown.level], chartType);
-                        } else { // restore
-                            chart.setTitle({
-                              text: chartTitle
-                            });
-                            setChart({
-                              name: name, 
-                              categories: categories, 
-                              data: data, 
-                              level: level,
-                              units: default_units
-                            }, colors[0], chartType);
-                        }
-                    });
+                      setChart(drilldown, colors[drilldown.level], chartType);
+                    } else { // restore
+                      chart.setTitle({
+                        text: chartTitle
+                      });
+                      setChart({
+                        name: name, 
+                        categories: categories, 
+                        data: data, 
+                        level: level,
+                        units: default_units
+                      }, colors[0], chartType);
+                    }
+                });
 
-                    var drilldown = this.drilldown;
-                  }
-               }
-            },
-            marker: {
-              symbol: "circle"
-            },
-            dataLabels: {
-               enabled: true,
-               color: colors[0],
-               // style: {
-               //    fontWeight: 'bold'
-               // },
-               formatter: function() {
-                  return this.y;
-               }
-               // rotation: -60
-            }               
-         }
+                var drilldown = this.drilldown;
+              }
+            }
+          },
+          marker: {
+            symbol: "circle"
+          },
+          dataLabels: {
+            enabled: true,
+            color: colors[0],
+            // style: {
+            //    fontWeight: 'bold'
+            // },
+            formatter: function() {
+              return this.y;
+            }
+            // rotation: -60
+          }               
+        }
       },
       // tooltip: {
       //    formatter: function() {
@@ -196,15 +196,14 @@
       //    }
       // },
       series: [{
-         name: name,
-         level: level,
-         data: data,
-         color: colors[0]
+        name: name,
+        level: level,
+        data: data,
+        color: colors[0]
       }],
       exporting: {
-         enabled: false
+        enabled: false
       }
-   });
-  })
-
+    });
+  });
 <% end %>
