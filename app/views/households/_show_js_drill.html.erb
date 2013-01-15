@@ -1,59 +1,4 @@
 <%= javascript_tag do %>
-  $(function(){
-    chartType = "<%= current_user.chart_type %>";
-    function changeType(series, newType) {
-      var dataArray = [],
-          points = series.data;
-      series.chart.addSeries({
-          type: newType,
-          name: series.name,
-          color: series.color,
-          data: series.options.data,
-          pointInterval: series.pointInterval,
-          pointStart: series.xData[0]
-      }, false);
-      
-      series.remove();
-    }
-    $('#chart_type').change(function() {
-      chartType = $(this).val();
-      for(i = 0, l = chart.series.length; i < l; ++i) {
-        var series = window.chart.series[0],
-            newType = chartType;
-        changeType(series, newType);
-      }
-    });
-
-    $(".chart-toggler").change(function() {
-      var axis = this.value;
-      if(this.checked){
-        // TODO add the axis
-        // TODO add the series
-        $.getJSON("<%= readings_household_path %>", 
-          { date: $(".period-shown #date").val(),
-            unit: $(".period-shown #unit").val(),
-            type: $(".period-shown #type").val(),
-            axis: axis,
-            id: <%= @household.id %> },
-          function (result) {
-            // TODO add the actual code for the other axis here
-            console.log(result);
-          }
-        );
-      }else{
-        // TODO remove the series
-        // TODO remove the axis
-      }
-    });
-
-  var colors = Highcharts.getOptions().colors,
-      chartTitle = 'Yearly <%= @type %> usage',
-      categories = <%= raw @data[:categories] %>,
-      name = '<%= raw @data[:name] %>',
-      level = <%= raw @data[:level] %>,
-      data = <%= raw @data[:data].to_json %>,
-      default_units = '<%= raw @data[:units] %>';
-   
   function setChart(drilldown, color, type) {
     chart.xAxis[0].setCategories(drilldown.categories);
     chart.series[0].remove();
@@ -74,10 +19,73 @@
     $(".period-shown #date").val(drilldown.date);
     $(".period-shown #type").val(drilldown.type);
   }
+
+  function changeType(series, newType) {
+    var dataArray = [],
+        points = series.data;
+    series.chart.addSeries({
+      type: newType,
+      name: series.name,
+      color: series.color,
+      data: series.options.data,
+      pointInterval: series.pointInterval,
+      pointStart: series.xData[0]
+    }, false);
+    
+    series.remove();
+  }
+
+  $(function(){
+    chartType = "<%= current_user.chart_type %>";
+
+    $('#chart_type').change(function() {
+      chartType = $(this).val();
+      for(i = 0, l = chart.series.length; i < l; ++i) {
+        var series = window.chart.series[0],
+            newType = chartType;
+        changeType(series, newType);
+      }
+    });
+
+    $(".chart-toggler").change(function() {
+      var axis = this.value;
+      if(this.checked){
+        // TODO add the axis
+        $.getJSON("<%= readings_household_path %>", 
+          { date: $(".period-shown #date").val(),
+            unit: $(".period-shown #unit").val(),
+            type: $(".period-shown #type").val(),
+            axis: axis,
+            id: <%= @household.id %> },
+          function (result) {
+            // console.log(result);
+            chart.addSeries({
+              type: "line",
+              name: result.name,
+              color: result.color,
+              data: result.data,
+              yAxis: 1
+            });
+          }
+        );
+      }else{
+        // TODO remove the series
+        chart.yAxis[1].series[0].destroy();
+        chart.yAxis[1].destroy();
+      }
+    });
+
+    var colors = Highcharts.getOptions().colors,
+        chartTitle = 'Yearly <%= @type %> usage',
+        categories = <%= raw @data[:categories] %>,
+        name = '<%= raw @data[:name] %>',
+        level = <%= raw @data[:level] %>,
+        data = <%= raw @data[:data].to_json %>,
+        default_units = '<%= raw @data[:units] %>';
    
-   chart = new Highcharts.Chart({
+    chart = new Highcharts.Chart({
       chart: {
-        renderTo: 'chart_container', 
+        renderTo: 'chart_container',
         type: chartType
       },
       title: {
@@ -102,11 +110,15 @@
       },
       yAxis: [
         {
+          type: "column",
           title: {
             text: default_units
           }
         },
         {
+          plotOptions: {
+            type: "line"
+          },
           title: {
             text: "secondary"
           },
@@ -129,28 +141,28 @@
                     axis: this.axis,
                     id: <%= @household.id %> }, 
                   function(drilldown) {
-                    if (this.level!=3) { // drill down
+                    // if (this.level!=3) { // drill down
                       
-                      chart.setTitle({
-                        text: drilldown.name
-                      });
+                    chart.setTitle({
+                      text: drilldown.name
+                    });
 
-                      setChart(drilldown, colors[drilldown.level], chartType);
-                    } else { // restore
-                      chart.setTitle({
-                        text: chartTitle
-                      });
-                      setChart({
-                        name: name, 
-                        categories: categories, 
-                        data: data, 
-                        level: level,
-                        units: default_units
-                      }, colors[0], chartType);
-                    }
-                });
-
-                var drilldown = this.drilldown;
+                    setChart(drilldown, colors[drilldown.level], chartType);
+                    // } else { // restore
+                    //   console.log("restore");
+                    //   chart.setTitle({
+                    //     text: chartTitle
+                    //   });
+                    //   setChart({
+                    //     name: name, 
+                    //     categories: categories, 
+                    //     data: data, 
+                    //     level: level,
+                    //     units: default_units
+                    //   }, colors[0], chartType);
+                    // }
+                  }
+                );
               }
             }
           },
@@ -199,7 +211,8 @@
         name: name,
         level: level,
         data: data,
-        color: colors[0]
+        color: colors[0],
+        yAxis: 0
       }],
       exporting: {
         enabled: false

@@ -12,6 +12,5 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require highcharts
 //= require bootstrap-datepicker/core
 //= require_tree .
