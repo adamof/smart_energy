@@ -25,17 +25,25 @@
     });
 
     $(".chart-toggler").change(function() {
-      $.getJSON("<%= readings_household_path %>", 
-        { date: $(".period-shown #date").val(),
-          unit: $(".period-shown #unit").val(),
-          type: $(".period-shown #type").val(),
-          axis: this.value,
-          id: <%= @household.id %> },
-        function (result) {
-          // TODO add the actual code for the other axis here
-          console.log(result);
-        }
-      );
+      var axis = this.value;
+      if(this.checked){
+        // TODO add the axis
+        // TODO add the series
+        $.getJSON("<%= readings_household_path %>", 
+          { date: $(".period-shown #date").val(),
+            unit: $(".period-shown #unit").val(),
+            type: $(".period-shown #type").val(),
+            axis: axis,
+            id: <%= @household.id %> },
+          function (result) {
+            // TODO add the actual code for the other axis here
+            console.log(result);
+          }
+        );
+      }else{
+        // TODO remove the series
+        // TODO remove the axis
+      }
     });
 
   var colors = Highcharts.getOptions().colors,
@@ -80,16 +88,16 @@
       },
       xAxis: {
         labels: {
-          rotation: -60,
+          rotation: -45,
           align: "right",
           style: {
-              fontSize: "13px",
-              fontFamily: "Verdana, sans-serif"
+            fontSize: "13px",
+            fontFamily: "Verdana, sans-serif"
           }
         },
-        gridLineColor: "#bfbfc0",
-        gridLineDashStyle: "ShortDash",
-        gridLineWidth: "1",
+        // gridLineColor: "#bfbfc0",
+        // gridLineDashStyle: "ShortDash",
+        // gridLineWidth: "1",
         categories: categories                     
       },
       yAxis: [
@@ -112,6 +120,8 @@
                events: {
                   click: function() {
                     writePeriod(this);
+                    // TODO check to see which toggles we have on
+                    // so that I can load them as well maybe in a single call?
                     $.getJSON("<%= readings_household_path %>", 
                       { date: this.date,
                         unit: this.unit,
@@ -146,17 +156,18 @@
             },
             marker: {
               symbol: "circle"
-            }
-            // dataLabels: {
-            //    enabled: true,
-            //    color: colors[0],
-            //    style: {
-            //       fontWeight: 'bold'
-            //    },
-            //    formatter: function() {
-            //       return this.y +'%';
-            //    }
-            // }               
+            },
+            dataLabels: {
+               enabled: true,
+               color: colors[0],
+               // style: {
+               //    fontWeight: 'bold'
+               // },
+               formatter: function() {
+                  return this.y;
+               }
+               // rotation: -60
+            }               
          }
       },
       // tooltip: {

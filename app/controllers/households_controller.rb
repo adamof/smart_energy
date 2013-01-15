@@ -103,7 +103,7 @@ class HouseholdsController < ApplicationController
   def chart_drill
     @household = Household.find(params[:id])
     @type = "power_records"
-    @date = nil
+    @date = Time.now
     @unit = "all"
     @data = @household.readings(@type, @date, @unit, "amount")
 
