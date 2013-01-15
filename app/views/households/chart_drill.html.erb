@@ -1,10 +1,32 @@
 <div class="span12">
-  <div id="chart_container">
+  <div class="row">
+    <div id="chart_container" class="span12">
+    </div>
   </div>
-  <%= select  "chart", 
-              "type", 
-              CHART_TYPES, 
-              selected: current_user.chart_type %>
+  <div id="chart_controls" class="row">
+    <div class="period-shown">
+      <%= hidden_field_tag "type", @type %>
+      <%= hidden_field_tag "date", @date %>
+      <%= hidden_field_tag "unit", @unit %>
+    </div>
+    <div class="span4">
+      <%= select  "chart", 
+                  "type", 
+                  CHART_TYPES, 
+                  selected: current_user.chart_type %>
+    </div>
+    <div class="span4">
+      <span class="pull-left">
+        Toggle: 
+      </span>
+      
+      <%= check_box_tag "carbon_toggler", "carbon_result", false, class: "pull-left chart-toggler" %>
+      <%= label_tag "carbon_toggler", "Carbon emissions", class: "pull-left" %>
+
+      <%= check_box_tag "cost_toggler", "cost", false, class: "pull-left chart-toggler" %>
+      <%= label_tag "cost_toggler", "Cost", class: "pull-left" %>
+    </div>
   </div>
+
 </div>
 <%= render partial: "show_js_drill.html.erb" %>

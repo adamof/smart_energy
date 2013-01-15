@@ -23,8 +23,19 @@
         changeType(series, newType);
       }
     });
-    $('#chartType').change(function(){
-      chart.changeSeriesType(this.value);
+
+    $(".chart-toggler").change(function() {
+      $.getJSON("<%= readings_household_path %>", 
+        { date: $(".period-shown #date").val(),
+          unit: $(".period-shown #unit").val(),
+          type: $(".period-shown #type").val(),
+          axis: this.value,
+          id: <%= @household.id %> },
+        function (result) {
+          // TODO add the actual code for the other axis here
+          console.log(result);
+        }
+      );
     });
 
   var colors = Highcharts.getOptions().colors,
@@ -49,6 +60,12 @@
          type: type
       });
    }
+
+  function writePeriod (drilldown) {
+    $(".period-shown #unit").val(drilldown.unit);
+    $(".period-shown #date").val(drilldown.date);
+    $(".period-shown #type").val(drilldown.type);
+  }
    
    chart = new Highcharts.Chart({
       chart: {
@@ -75,20 +92,31 @@
         gridLineWidth: "1",
         categories: categories                     
       },
-      yAxis: {
-        title: {
-          text: default_units
+      yAxis: [
+        {
+          title: {
+            text: default_units
+          }
+        },
+        {
+          title: {
+            text: "secondary"
+          },
+          opposite: true
         }
-      },
+      ],
       plotOptions: {
          series: {
             cursor: 'pointer',
             point: {
                events: {
                   click: function() {
+                    writePeriod(this);
                     $.getJSON("<%= readings_household_path %>", 
                       { date: this.date,
                         unit: this.unit,
+                        type: this.type,
+                        axis: this.axis,
                         id: <%= @household.id %> }, 
                       function(drilldown) {
                         if (this.level!=3) { // drill down

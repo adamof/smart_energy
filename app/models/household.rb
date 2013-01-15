@@ -3,7 +3,7 @@ class Household < ActiveRecord::Base
   has_many :power_records
   has_many :gas_records
 
-  def readings(energy, date, unit)
+  def readings(energy, date, unit, axis="amount")
     categories = []
     data = []
     type = energy == "gas" ? "gas_records" : "power_records"
@@ -44,9 +44,9 @@ class Household < ActiveRecord::Base
     end
 
     if unit=="all"
-      readings = self.send(type).aggregate_records(group)
+      readings = self.send(type).aggregate_records(group, axis)
     else
-      readings = self.send(type).within(date, unit).aggregate_records(group)
+      readings = self.send(type).within(date, unit).aggregate_records(group, axis)
     end
 
 
@@ -55,7 +55,9 @@ class Household < ActiveRecord::Base
       data << { date: record["date"].strftime("%F"),
                 y: (record["y"]/unit_divider).round(2),
                 unit: child_unit,
-                level: level-1 }
+                level: level-1,
+                type: type,
+                axis: axis }
     end
 
     return {
