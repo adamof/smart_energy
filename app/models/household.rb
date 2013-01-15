@@ -3,43 +3,63 @@ class Household < ActiveRecord::Base
   has_many :power_records
   has_many :gas_records
 
+  NAME_COMBINATIONS = {
+    "power_records_amount" => "Electricity usage",
+    "power_records_carbon_result" => "CO2 generated",
+    "gas_records_amount" => "Gas usage",
+    "gas_records_carbon_result" => "CO2 generated"
+  }
+
+  UNIT_COMBINATIONS = {
+    "amount" => {
+      "day" => "watt-hours",
+      "month" => "kilowatt-hours",
+      "year" => "megawatt-hours",
+      "all" => "megawatt-hours"
+    },
+    "carbon_result" => {
+      "day" => "grams",
+      "month" => "kilograms",
+      "year" => "tons",
+      "all" => "megawatt-hours"
+    }
+  }
+
   def readings(energy, date, unit, axis="amount")
     categories = []
     data = []
     type = energy == "gas" ? "gas_records" : "power_records"
+    series_name = NAME_COMBINATIONS["#{type}_#{axis}"]
+    units = UNIT_COMBINATIONS[axis][unit]
 
     case unit
     when "day"
-      name = date.strftime("%d %B")
+      chart_name = date.strftime("%d %B %Y")
       group = "hour"
       frmt_time = "%H:%M"
       child_unit = "all"
       level = 3
-      units = "watt-hours"
       unit_divider = 1
     when "month"
-      name = date.strftime("%B")
+      chart_name = date.strftime("%B %Y")
       group = "date"
       frmt_time = "%d"
       child_unit = "day"
       level = 2
-      units = "kilowatt-hours"
       unit_divider = 1000
     when "year"
-      name = date.strftime("%Y")
+      chart_name = date.strftime("%Y")
       group = "month"
       frmt_time = "%B"
       child_unit = "month"
       level = 1
-      units = "kilowatt-hours"
       unit_divider = 1000
     else
-      name = "All time usage"
+      chart_name = "All time usage"
       group = "year"
       frmt_time = "%Y"
       child_unit = "year"
       level = 0
-      units = "megawatt-hours"
       unit_divider = 1000000
     end
 
@@ -62,7 +82,9 @@ class Household < ActiveRecord::Base
 
     return {
       units: units,
-      name: name,
+      # make the name be describing - Electricity, CO2, Gas, money
+      chart_name: chart_name,
+      series_name: series_name,
       data: data,
       categories: categories,
       level: level

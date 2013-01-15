@@ -1,16 +1,21 @@
 <%= javascript_tag do %>
-  function setChart(drilldown, color, type) {
-    chart.xAxis[0].setCategories(drilldown.categories);
-    chart.series[0].remove();
-
-    chart.yAxis[0].setTitle({text: drilldown.units});
+  function setChart(drilldown, color, type, pointClick, yAxis) {
+    if(pointClick){
+      chart.setTitle({
+        text: drilldown.chart_name
+      });
+      chart.xAxis[0].setCategories(drilldown.categories);
+      chart.series[0].remove();
+    }
+    chart.yAxis[yAxis].setTitle({text: drilldown.units});
 
     chart.addSeries({
-      name: drilldown.name,
+      name: drilldown.series_name,
       data: drilldown.data,
       level: drilldown.level,
       color: color,
-      type: type
+      type: type,
+      yAxis: yAxis
     });
   }
 
@@ -59,17 +64,10 @@
             id: <%= @household.id %> },
           function (result) {
             // console.log(result);
-            chart.addSeries({
-              type: "line",
-              name: result.name,
-              color: result.color,
-              data: result.data,
-              yAxis: 1
-            });
+            setChart(result, colors[result.level+3], "line", false, 1);
           }
         );
       }else{
-        // TODO remove the series
         chart.yAxis[1].series[0].destroy();
         chart.yAxis[1].destroy();
       }
@@ -142,12 +140,7 @@
                     id: <%= @household.id %> }, 
                   function(drilldown) {
                     // if (this.level!=3) { // drill down
-                      
-                    chart.setTitle({
-                      text: drilldown.name
-                    });
-
-                    setChart(drilldown, colors[drilldown.level], chartType);
+                    setChart(drilldown, colors[drilldown.level], chartType, true, 0);
                     // } else { // restore
                     //   console.log("restore");
                     //   chart.setTitle({
