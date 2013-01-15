@@ -1,0 +1,3 @@
+class PowerIntensity < CarbonIntensity
+
+end

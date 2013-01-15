@@ -11,11 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130113102027) do
+ActiveRecord::Schema.define(:version => 20130115091606) do
 
   create_table "carbon_intensities", :force => true do |t|
     t.datetime "period"
     t.float    "value"
+    t.string   "type"
   end
 
   create_table "households", :force => true do |t|
@@ -41,9 +42,11 @@ ActiveRecord::Schema.define(:version => 20130113102027) do
     t.integer  "household_id"
     t.float    "amount"
     t.datetime "period_end"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.string   "type",         :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "type",             :null => false
+    t.float    "carbon_intensity"
+    t.float    "carbon_result"
   end
 
   create_table "users", :force => true do |t|
