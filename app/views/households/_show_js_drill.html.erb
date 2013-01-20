@@ -1,5 +1,5 @@
 <%= javascript_tag do %>
-  function setChart(drilldown, color, type, pointClick, yAxis) {
+  function setChart(drilldown, type, pointClick, yAxis) {
     if(pointClick){
       chart.setTitle({
         text: drilldown.chart_name
@@ -13,7 +13,7 @@
       name: drilldown.series_name,
       data: drilldown.data,
       level: drilldown.level,
-      color: color,
+      color: drilldown.color,
       type: type,
       yAxis: yAxis
     });
@@ -53,7 +53,11 @@
     });
 
     $(".chart-toggler").change(function() {
-      var axis = this.value;
+      var axis = this.value,
+          axis_n = parseInt($(this).attr("axis_n")),
+          color = $(this).attr("color"),
+          type = $(this).attr("series_type");
+
       if(this.checked){
         // TODO add the axis
         $.getJSON("<%= readings_household_path %>", 
@@ -63,7 +67,7 @@
             axis: axis,
             id: <%= @household.id %> },
           function (result) {
-            setChart(result, colors[result.level+3], "spline", false, 1);
+            setChart(result, type, false, axis_n);
           }
         );
       }else{
@@ -108,7 +112,15 @@
         {
           type: "column",
           title: {
-            text: default_units
+            text: default_units,
+            style: {
+              color: '#4572A7'
+            }
+          },
+          labels: {
+            style: {
+              color: '#4572A7'
+            }
           }
         },
         {
@@ -116,7 +128,33 @@
             type: "line"
           },
           title: {
-            text: "secondary"
+            text: "Carbon generated",
+            style: {
+              color: '#89A54E'
+            }
+          },
+          labels: {
+            style: {
+              color: '#89A54E'
+            }
+          },
+          opposite: true,
+          showEmpty: false
+        },
+        {
+          plotOptions: {
+            type: "spline"
+          },
+          title: {
+            text: "Carbon intensity",
+            style: {
+              color: '#AA4643'
+            }
+          },
+          labels: {
+            style: {
+              color: '#AA4643'
+            }
           },
           opposite: true,
           showEmpty: false
@@ -139,7 +177,7 @@
                     id: <%= @household.id %> }, 
                   function(drilldown) {
                     // if (this.level!=3) { // drill down
-                    setChart(drilldown, colors[drilldown.level], chartType, true, 0);
+                    setChart(drilldown, chartType, true, 0);
                     // } else { // restore
                     //   console.log("restore");
                     //   chart.setTitle({
@@ -162,7 +200,7 @@
             symbol: "circle"
           },
           dataLabels: {
-            enabled: true,
+            enabled: false,
             color: colors[0],
             // style: {
             //    fontWeight: 'bold'
@@ -203,7 +241,7 @@
         name: name,
         level: level,
         data: data,
-        color: colors[0],
+        color: "#4572A7",
         yAxis: 0
       }],
       exporting: {

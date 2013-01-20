@@ -6,6 +6,7 @@ class Household < ActiveRecord::Base
   NAME_COMBINATIONS = {
     "power_records_amount" => "Electricity usage",
     "power_records_carbon_result" => "CO2 generated",
+    "power_records_carbon_intensity" => "CO2/kWh",
     "gas_records_amount" => "Gas usage",
     "gas_records_carbon_result" => "CO2 generated"
   }
@@ -25,10 +26,16 @@ class Household < ActiveRecord::Base
     },
     "carbon_intensity" => {
       "day" => "grams",
-      "month" => "kilograms",
-      "year" => "tons",
-      "all" => "megawatt-hours"
+      "month" => "grams",
+      "year" => "grams",
+      "all" => "grams"
     }
+  }
+
+  COLORS = {
+    "amount" => "#4572A7",
+    "carbon_intensity" => "#AA4643",
+    "carbon_result" => "#89A54E",
   }
 
   def readings(energy, date, unit, axis="amount")
@@ -38,6 +45,8 @@ class Household < ActiveRecord::Base
     type = energy
     series_name = NAME_COMBINATIONS["#{type}_#{axis}"]
     units = UNIT_COMBINATIONS[axis][unit]
+    color = COLORS[axis]
+    operation = "SUM"
 
     case unit
     when "day"
@@ -70,12 +79,16 @@ class Household < ActiveRecord::Base
       unit_divider = 1000000
     end
 
+    if axis == "carbon_intensity"
+      operation = "AVG"
+      unit_divider = 1
+    end
+
     if unit=="all"
       readings = self.send(type).aggregate_records(group, axis)
     else
-      readings = self.send(type).within(date, unit).aggregate_records(group, axis, axis=="carbon_intensity" ? "AVG" : "SUM")
+      readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation)
     end
-
 
     readings.each do |record|
       categories << record["date"].strftime(frmt_time)
@@ -94,7 +107,8 @@ class Household < ActiveRecord::Base
       series_name: series_name,
       data: data,
       categories: categories,
-      level: level
+      level: level,
+      color: color
     }    
   end
 
