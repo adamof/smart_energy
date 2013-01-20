@@ -40,4 +40,16 @@ module ImportData
   def fix_data
     
   end
+  def self.import_intensities
+    CarbonRecord.delete_all
+    CSV.foreach("intensities.2011.csv", headers: false) do |r|
+      CarbonRecord.create!( period_end: DateTime.strptime(r[0], "%Y/%m/%d %H:%M"),
+                            amount: r[1] )
+    end
+  end
+  def self.refresh_intensities
+    Record.each do |r|
+      r.save!
+    end
+  end
 end

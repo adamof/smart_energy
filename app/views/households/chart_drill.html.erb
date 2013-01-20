@@ -19,6 +19,9 @@
       <span class="pull-left">
         Toggle: 
       </span>
+      <%= check_box_tag "carbon_intensity_toggler", "carbon_intensity", false, class: "pull-left chart-toggler" %>
+      <%= label_tag "carbon_intensity_toggler", "Carbon intensity", class: "pull-left" %>
+
       
       <%= check_box_tag "carbon_toggler", "carbon_result", false, class: "pull-left chart-toggler" %>
       <%= label_tag "carbon_toggler", "Carbon emissions", class: "pull-left" %>

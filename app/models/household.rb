@@ -22,13 +22,20 @@ class Household < ActiveRecord::Base
       "month" => "kilograms",
       "year" => "tons",
       "all" => "megawatt-hours"
+    },
+    "carbon_intensity" => {
+      "day" => "grams",
+      "month" => "kilograms",
+      "year" => "tons",
+      "all" => "megawatt-hours"
     }
   }
 
   def readings(energy, date, unit, axis="amount")
     categories = []
     data = []
-    type = energy == "gas" ? "gas_records" : "power_records"
+    # type = energy == "gas" ? "gas_records" : "power_records"
+    type = energy
     series_name = NAME_COMBINATIONS["#{type}_#{axis}"]
     units = UNIT_COMBINATIONS[axis][unit]
 
@@ -66,7 +73,7 @@ class Household < ActiveRecord::Base
     if unit=="all"
       readings = self.send(type).aggregate_records(group, axis)
     else
-      readings = self.send(type).within(date, unit).aggregate_records(group, axis)
+      readings = self.send(type).within(date, unit).aggregate_records(group, axis, axis=="carbon_intensity" ? "AVG" : "SUM")
     end
 
 

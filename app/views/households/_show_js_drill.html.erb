@@ -63,13 +63,11 @@
             axis: axis,
             id: <%= @household.id %> },
           function (result) {
-            // console.log(result);
-            setChart(result, colors[result.level+3], "line", false, 1);
+            setChart(result, colors[result.level+3], "spline", false, 1);
           }
         );
       }else{
         chart.yAxis[1].series[0].destroy();
-        chart.yAxis[1].destroy();
       }
     });
 
@@ -120,7 +118,8 @@
           title: {
             text: "secondary"
           },
-          opposite: true
+          opposite: true,
+          showEmpty: false
         }
       ],
       plotOptions: {

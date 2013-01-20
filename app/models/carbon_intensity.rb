@@ -10,6 +10,10 @@ class CarbonIntensity < ActiveRecord::Base
   #   end
   # end
   def self.for(date)
-    self.find_by_period(date.beginning_of_month).value
+    if record = self.find_by_period(date.beginning_of_hour)
+      return record.value
+    else
+      return self.where("month(period) = #{date.month}").group("month(period)").average(:value).values.last.to_f.round(2)
+    end
   end
 end
