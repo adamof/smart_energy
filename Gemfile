@@ -25,8 +25,7 @@ end
 gem 'jquery-rails'
 gem 'devise'
 
-gem 'lazy_high_charts', #:path => "/home/badjo/lazy_high_charts"
-                        :git => 'git@github.com:adamof/lazy_high_charts.git'
+gem 'lazy_high_charts', :git => 'git@github.com:adamof/lazy_high_charts.git'
 gem 'bootstrap-datepicker-rails'
 gem 'bootstrap-timepicker-rails', :require => 'bootstrap-timepicker-rails',
                                   :git => 'git://github.com/tispratik/bootstrap-timepicker-rails.git'
