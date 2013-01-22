@@ -19,16 +19,16 @@ class Household < ActiveRecord::Base
       "all" => "megawatt-hours"
     },
     "carbon_result" => {
-      "day" => "grams",
-      "month" => "kilograms",
-      "year" => "tons",
-      "all" => "megawatt-hours"
+      "day" => "grams CO2",
+      "month" => "kilograms CO2",
+      "year" => "kilograms CO2",
+      "all" => "tons CO2"
     },
     "carbon_intensity" => {
-      "day" => "grams",
-      "month" => "grams",
-      "year" => "grams",
-      "all" => "grams"
+      "day" => "grams/kWh",
+      "month" => "grams/kWh",
+      "year" => "grams/kWh",
+      "all" => "grams/kWh"
     }
   }
 

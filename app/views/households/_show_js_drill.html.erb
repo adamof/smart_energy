@@ -15,7 +15,11 @@
       level: drilldown.level,
       color: drilldown.color,
       type: type,
-      yAxis: yAxis
+      yAxis: yAxis,
+      dataLabels: {
+        enabled: true,
+        color: drilldown.color
+      }
     });
   }
 
@@ -71,7 +75,7 @@
           }
         );
       }else{
-        chart.yAxis[1].series[0].destroy();
+        chart.yAxis[axis_n].series[0].destroy();
       }
     });
 
@@ -124,15 +128,13 @@
           }
         },
         {
-          plotOptions: {
-            type: "line"
-          },
           title: {
             text: "Carbon generated",
             style: {
               color: '#89A54E'
             }
           },
+          min: -200,
           labels: {
             style: {
               color: '#89A54E'
@@ -151,6 +153,7 @@
               color: '#AA4643'
             }
           },
+          min: -200,
           labels: {
             style: {
               color: '#AA4643'
@@ -200,8 +203,8 @@
             symbol: "circle"
           },
           dataLabels: {
-            enabled: false,
-            color: colors[0],
+            // enabled: true,
+            // color: colors[0],
             // style: {
             //    fontWeight: 'bold'
             // },
