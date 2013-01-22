@@ -1,16 +1,16 @@
 GIT
+  remote: git://github.com/adamof/lazy_high_charts.git
+  revision: fa6c4ff45d27d85825b04d93f9086cca9406f7a3
+  specs:
+    lazy_high_charts (1.2.2)
+      bundler (~> 1.0)
+
+GIT
   remote: git://github.com/tispratik/bootstrap-timepicker-rails.git
   revision: 66810b4ab6c16109c9e0e191e99b1d46b14325cc
   specs:
     bootstrap-timepicker-rails (0.1.2)
       railties (>= 3.0)
-
-GIT
-  remote: git@github.com:adamof/lazy_high_charts.git
-  revision: fa6c4ff45d27d85825b04d93f9086cca9406f7a3
-  specs:
-    lazy_high_charts (1.2.2)
-      bundler (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
