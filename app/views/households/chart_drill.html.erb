@@ -13,7 +13,7 @@
       <%= select  "chart", 
                   "type", 
                   CHART_TYPES, 
-                  selected: current_user.chart_type %>
+                  selected: current_user.try(:chart_type) || "column" %>
     </div>
     <div class="span4">
       <span class="pull-left">

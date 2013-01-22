@@ -45,7 +45,7 @@
   }
 
   $(function(){
-    chartType = "<%= current_user.chart_type %>";
+    chartType = "<%= current_user.try(:chart_type) || 'column' %>";
 
     $('#chart_type').change(function() {
       chartType = $(this).val();
