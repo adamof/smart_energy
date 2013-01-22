@@ -5,8 +5,9 @@ GIT
     bootstrap-timepicker-rails (0.1.2)
       railties (>= 3.0)
 
-PATH
-  remote: /home/badjo/lazy_high_charts
+GIT
+  remote: git@github.com:adamof/lazy_high_charts.git
+  revision: fa6c4ff45d27d85825b04d93f9086cca9406f7a3
   specs:
     lazy_high_charts (1.2.2)
       bundler (~> 1.0)
