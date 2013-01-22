@@ -58,7 +58,7 @@ class Household < ActiveRecord::Base
       unit_divider = 1
     when "month"
       chart_name = date.strftime("%B %Y")
-      group = "date"
+      group = "day"
       frmt_time = "%d"
       child_unit = "day"
       level = 2
@@ -91,9 +91,10 @@ class Household < ActiveRecord::Base
     end
 
     readings.each do |record|
-      categories << record["date"].strftime(frmt_time)
-      data << { date: record["date"].strftime("%F"),
-                y: (record["y"]/unit_divider).round(2),
+      record_date = DateTime.strptime(record["date"], "%F %T")
+      categories << record_date.strftime(frmt_time)
+      data << { date: record_date.strftime("%F"),
+                y: (record["y"].to_f/unit_divider).round(2),
                 unit: child_unit,
                 level: level-1,
                 type: type,

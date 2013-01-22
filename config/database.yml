@@ -10,7 +10,7 @@
 #   timeout: 5000
 
 development:
-  adapter: mysql2
+  adapter: postgresql
   database: smart_energy
   username: smart_energy
   password: smart_energy

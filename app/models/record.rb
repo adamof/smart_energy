@@ -3,8 +3,8 @@ class Record < ActiveRecord::Base
   scope :within, lambda{|date, unit| where("period_end >= ? AND period_end < ?", date, date + 1.send(unit))}
 
   def self.aggregate_records(group, column, operation="SUM")
-    group("#{group}(period_end)")
-      .select(%{period_end as date, 
-                #{operation}(#{column}) as y}).order(:period_end)
+    group("date")
+      .select(%{DISTINCT ON (date) #{operation}(#{column}) y, 
+                date_trunc('#{group}', period_end) date}).order("date")
   end
 end
