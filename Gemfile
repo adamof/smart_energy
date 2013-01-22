@@ -8,6 +8,7 @@ gem 'rails', '3.2.8'
 gem 'sqlite3', group: [:development, :test]
 gem 'pg'
 gem 'activerecord-postgresql-adapter'
+gem 'bootstrap-sass-rails'
 
 
 # Gems used only for assets and not required
@@ -15,7 +16,6 @@ gem 'activerecord-postgresql-adapter'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'bootstrap-sass-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
