@@ -38,7 +38,7 @@ class Household < ActiveRecord::Base
     "carbon_result" => "#89A54E",
   }
 
-  def readings(energy, date, unit, axis="amount")
+  def readings(energy, date, unit, axis="amount", running=false)
     categories = []
     data = []
     # type = energy == "gas" ? "gas_records" : "power_records"
@@ -79,9 +79,12 @@ class Household < ActiveRecord::Base
       unit_divider = 1000000
     end
 
-    if axis == "carbon_intensity"
+    case axis 
+    when "carbon_intensity"
       operation = "AVG"
       unit_divider = 1
+    when "carbon_result"
+      running = true
     end
 
     if unit=="all"
@@ -89,12 +92,12 @@ class Household < ActiveRecord::Base
     else
       readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation)
     end
-
+    sum=0
     readings.each do |record|
-      record_date = DateTime.strptime(record["date"], "%F %T")
+      record_date = DateTime.strptime(record["period_date"], "%F %T")
       categories << record_date.strftime(frmt_time)
       data << { date: record_date.strftime("%F"),
-                y: (record["y"].to_f/unit_divider).round(2),
+                y: ((running ? sum += record["y"].to_f : record["y"].to_f)/unit_divider).round(2),
                 unit: child_unit,
                 level: level-1,
                 type: type,
