@@ -88,21 +88,21 @@
       }
     });
 
-    var colors = Highcharts.getOptions().colors,
-        chartTitle = 'Yearly <%= @type %> usage',
-        categories = <%= raw @data[:categories] %>,
-        name = '<%= raw @data[:name] %>',
-        level = <%= raw @data[:level] %>,
-        data = <%= raw @data[:data].to_json %>;
+    var colors = Highcharts.getOptions().colors;
+        // chartTitle = 'Yearly <%= @type %> usage',
+        // categories = <%= raw @data[:categories] %>,
+        // name = '<%= raw @data[:name] %>',
+        // level = <%= raw @data[:level] %>,
+        // data = <%= raw @data[:data].to_json %>;
    
     chart = new Highcharts.Chart({
       chart: {
         renderTo: 'chart_container',
         type: chartType
       },
-      title: {
-        text: chartTitle
-      },
+      // title: {
+        // text: "Usage"
+      // },
       subtitle: {
         text: 'Click on a column to view monthly usage. Click again to view daily usage.'
       },
@@ -118,7 +118,7 @@
         // gridLineColor: "#bfbfc0",
         // gridLineDashStyle: "ShortDash",
         // gridLineWidth: "1",
-        categories: categories                     
+        // categories: categories                
       },
       yAxis: [
         {
@@ -227,16 +227,22 @@
           return s;
         }
       },
-      series: [{
-        name: name,
-        level: level,
-        data: data,
-        color: "#4572A7",
-        yAxis: 0
-      }],
+      series: [{}],
       exporting: {
         enabled: false
       }
     });
+
+    $.getJSON("<%= readings_household_path %>", 
+      { date: "<%= @date %>",
+        unit: "<%= @unit %>",
+        type: "<%= @type %>",
+        axis: "<%= @axis %>",
+        all: true,
+        id: <%= @household.id %> }, 
+      function(drilldown) {
+        setChart(drilldown, chartType, true, 0);
+      }
+    );
   });
 <% end %>

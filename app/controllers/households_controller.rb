@@ -105,6 +105,7 @@ class HouseholdsController < ApplicationController
     @type = "power_records"
     @date = Time.now
     @unit = "all"
+    @axis = "energy_cost"
     @data = @household.readings(@type, @date, @unit, "energy_cost", true)
 
     respond_to do |format|
