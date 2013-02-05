@@ -17,7 +17,7 @@
       type: type,
       yAxis: yAxis,
       dataLabels: {
-        enabled: true,
+        enabled: false,
         color: drilldown.color
       }
     });
@@ -71,6 +71,7 @@
             axis: axis,
             id: <%= @household.id %> },
           function (result) {
+            console.log(result);
             setChart(result, type, false, axis_n);
           }
         );

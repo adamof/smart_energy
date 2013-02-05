@@ -7,6 +7,8 @@ class Household < ActiveRecord::Base
     "power_records_amount" => "Electricity usage",
     "power_records_carbon_result" => "CO2 generated",
     "power_records_carbon_intensity" => "CO2/kWh",
+    "power_records_price" => "pence/kWh",
+    "power_records_cost" => "cost",
     "gas_records_amount" => "Gas usage",
     "gas_records_carbon_result" => "CO2 generated"
   }
@@ -29,6 +31,18 @@ class Household < ActiveRecord::Base
       "month" => "grams/kWh",
       "year" => "grams/kWh",
       "all" => "grams/kWh"
+    },
+    "price" => {
+      "day" => "pence/kWh",
+      "month" => "pence/kWh",
+      "year" => "pence/kWh",
+      "all" => "pence/kWh"
+    },
+    "cost" => {
+      "day" => "pence",
+      "month" => "pounds",
+      "year" => "pounds",
+      "all" => "pounds"
     }
   }
 
@@ -36,6 +50,8 @@ class Household < ActiveRecord::Base
     "amount" => "#4572A7",
     "carbon_intensity" => "#AA4643",
     "carbon_result" => "#89A54E",
+    "price" => "#AA4643",
+    "cost" => "#89A54E"
   }
 
   def readings(energy, date, unit, axis="amount", running=false)
@@ -84,6 +100,12 @@ class Household < ActiveRecord::Base
       operation = "AVG"
       unit_divider = 1
     when "carbon_result"
+      running = true
+    when "price"
+      operation = "AVG"
+      unit_divider = 1
+    when "cost"
+      unit_divider /= 10 if unit_divider != 1
       running = true
     end
 

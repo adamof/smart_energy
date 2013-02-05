@@ -27,7 +27,15 @@
 
 <!--       <%= check_box_tag "cost_toggler", "cost", false, class: "pull-left chart-toggler" %>
       <%= label_tag "cost_toggler", "Cost", class: "pull-left" %>
- -->    </div>
+-->    
+    </div>
+    <div class="span4">
+      <%= check_box_tag "price_toggler", "price", false, class: "pull-left chart-toggler", color: 5, axis_n: 2, series_type: "line" %>
+      <%= label_tag "price_toggler", "Energy price", class: "pull-left" %>
+      
+      <%= check_box_tag "cost_toggler", "cost", false, class: "pull-left chart-toggler", color: 6, axis_n: 1, series_type: "spline" %>
+      <%= label_tag "cost_toggler", "Energy cost", class: "pull-left" %>      
+    </div>
   </div>
 
 </div>
