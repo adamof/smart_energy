@@ -15,15 +15,15 @@ class Household < ActiveRecord::Base
 
   UNIT_COMBINATIONS = {
     "amount" => {
-      "day" => "watt-hours",
-      "month" => "kilowatt-hours",
-      "year" => "megawatt-hours",
-      "all" => "megawatt-hours"
+      "day" => "Wh",
+      "month" => "kWh",
+      "year" => "mWh",
+      "all" => "mWh"
     },
     "carbon_result" => {
       "day" => "grams CO2",
-      "month" => "kilograms CO2",
-      "year" => "kilograms CO2",
+      "month" => "kg CO2",
+      "year" => "kg CO2",
       "all" => "tons CO2"
     },
     "carbon_intensity" => {
@@ -98,12 +98,12 @@ class Household < ActiveRecord::Base
     case axis 
     when "carbon_intensity"
       operation = "AVG"
-      unit_divider = 1
+      y_divider = 1
     when "price"
       operation = "AVG"
-      unit_divider = 1
+      y_divider = 1
     when "energy_cost"
-      unit_divider = 100 if unit_divider != 1
+      y_divider = 100 if unit_divider != 1
     end
 
     if unit=="all"
@@ -112,13 +112,21 @@ class Household < ActiveRecord::Base
       readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation, all)
     end
     sum=0
-    props = UNIT_COMBINATIONS.keys
+    props = UNIT_COMBINATIONS.keys - ["cost", "carbon_intensity", "price"]
+    totals = Hash.new(0)
     readings.each do |record|
       record_date = DateTime.strptime(record["period_date"], "%F %T")
       categories << record_date.strftime(frmt_time)
+      if all
+        results = {}
+        props.each do |prop|
+          results[prop] = [(record[prop].to_f/unit_divider).round(2), UNIT_COMBINATIONS[prop][unit]]
+          totals[prop] += record[prop].to_f 
+        end
+      end
       data << { date: record_date.strftime("%F"),
-                y: (record[axis].to_f/unit_divider).round(2),
-                results: all ? Hash[props.collect{|prop| [prop, [(record[prop].to_f/unit_divider).round(2), UNIT_COMBINATIONS[prop][unit]]]}] : false,
+                y: (record[axis].to_f/y_divider).round(2),
+                results: all ? results : false,
                 unit: child_unit,
                 level: level-1,
                 type: type,
@@ -133,7 +141,8 @@ class Household < ActiveRecord::Base
       data: data,
       categories: categories,
       level: level,
-      color: color
+      color: color,
+      totals: totals
     }    
   end
 

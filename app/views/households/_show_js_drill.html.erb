@@ -205,16 +205,17 @@
       tooltip: {
         formatter: function() {
           var point = this.point;
+          s = '<b>' + point.category + '</b> <br/>';
 
           if(point.results){
-            s =  "Cost: " + point.results.energy_cost.join(" ") + ' <br/>';
+            s +=  "Cost: " + point.y + " " + point.series.yAxis.axisTitle.text + ' <br/>';
             s += "Usage: " + point.results.amount.join(" ") + ' <br/>';
-            s += "Carbon intensity: " + point.results.carbon_intensity.join(" ") + ' <br/>';
+            // s += "Carbon intensity: " + point.results.carbon_intensity.join(" ") + ' <br/>';
             s += "CO2 generated: " + point.results.carbon_result.join(" ") + ' <br/>';
           }else{
-            s = point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
+            s += point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
           }
-
+          
           return s;
         }
       },
