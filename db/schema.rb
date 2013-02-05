@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130201122138) do
+ActiveRecord::Schema.define(:version => 20130205130243) do
 
   create_table "carbon_intensities", :force => true do |t|
     t.datetime "period"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(:version => 20130201122138) do
     t.decimal  "carbon_intensity", :precision => 255, :scale => 0
     t.decimal  "carbon_result",    :precision => 255, :scale => 0
     t.float    "price"
-    t.float    "cost"
+    t.float    "energy_cost"
   end
 
   create_table "users", :force => true do |t|

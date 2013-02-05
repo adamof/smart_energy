@@ -6,9 +6,9 @@ class Household < ActiveRecord::Base
   NAME_COMBINATIONS = {
     "power_records_amount" => "Electricity usage",
     "power_records_carbon_result" => "CO2 generated",
-    "power_records_carbon_intensity" => "CO2/kWh",
-    "power_records_price" => "pence/kWh",
-    "power_records_cost" => "cost",
+    "power_records_carbon_intensity" => "Carbon intensity",
+    "power_records_price" => "Energy price",
+    "power_records_energy_cost" => "Energy cost",
     "gas_records_amount" => "Gas usage",
     "gas_records_carbon_result" => "CO2 generated"
   }
@@ -38,7 +38,7 @@ class Household < ActiveRecord::Base
       "year" => "pence/kWh",
       "all" => "pence/kWh"
     },
-    "cost" => {
+    "energy_cost" => {
       "day" => "pence",
       "month" => "pounds",
       "year" => "pounds",
@@ -47,14 +47,14 @@ class Household < ActiveRecord::Base
   }
 
   COLORS = {
-    "amount" => "#4572A7",
+    "amount" => "#89A54E",
     "carbon_intensity" => "#AA4643",
     "carbon_result" => "#89A54E",
     "price" => "#AA4643",
-    "cost" => "#89A54E"
+    "energy_cost" => "#4572A7"
   }
 
-  def readings(energy, date, unit, axis="amount", running=false)
+  def readings(energy, date, unit, axis="amount", all=false)
     categories = []
     data = []
     # type = energy == "gas" ? "gas_records" : "power_records"
@@ -62,7 +62,7 @@ class Household < ActiveRecord::Base
     series_name = NAME_COMBINATIONS["#{type}_#{axis}"]
     units = UNIT_COMBINATIONS[axis][unit]
     color = COLORS[axis]
-    operation = "SUM"
+    operation = "sum"
 
     case unit
     when "day"
@@ -99,27 +99,26 @@ class Household < ActiveRecord::Base
     when "carbon_intensity"
       operation = "AVG"
       unit_divider = 1
-    when "carbon_result"
-      running = true
     when "price"
       operation = "AVG"
       unit_divider = 1
-    when "cost"
-      unit_divider /= 10 if unit_divider != 1
-      running = true
+    when "energy_cost"
+      unit_divider = 100 if unit_divider != 1
     end
 
     if unit=="all"
-      readings = self.send(type).aggregate_records(group, axis)
+      readings = self.send(type).aggregate_records(group, axis, operation, all)
     else
-      readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation)
+      readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation, all)
     end
     sum=0
+    props = UNIT_COMBINATIONS.keys
     readings.each do |record|
       record_date = DateTime.strptime(record["period_date"], "%F %T")
       categories << record_date.strftime(frmt_time)
       data << { date: record_date.strftime("%F"),
-                y: ((running ? sum += record["y"].to_f : record["y"].to_f)/unit_divider).round(2),
+                y: (record[axis].to_f/unit_divider).round(2),
+                results: all ? Hash[props.collect{|prop| [prop, [(record[prop].to_f/unit_divider).round(2), UNIT_COMBINATIONS[prop][unit]]]}] : false,
                 unit: child_unit,
                 level: level-1,
                 type: type,

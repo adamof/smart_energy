@@ -105,7 +105,7 @@ class HouseholdsController < ApplicationController
     @type = "power_records"
     @date = Time.now
     @unit = "all"
-    @data = @household.readings(@type, @date, @unit, "amount")
+    @data = @household.readings(@type, @date, @unit, "energy_cost", true)
 
     respond_to do |format|
       format.html { render :chart_drill}
@@ -114,7 +114,7 @@ class HouseholdsController < ApplicationController
 
   def readings
     @household = Household.find(params[:id])
-    @data = @household.readings(params[:type], Date.strptime(params[:date], "%F"), params[:unit], params[:axis])
+    @data = @household.readings(params[:type], Date.strptime(params[:date], "%F"), params[:unit], params[:axis], params[:all]=="true")
 
     render json: @data.to_json
   end

@@ -69,9 +69,9 @@
             unit: $(".period-shown #unit").val(),
             type: $(".period-shown #type").val(),
             axis: axis,
+            all: false,
             id: <%= @household.id %> },
           function (result) {
-            console.log(result);
             setChart(result, type, false, axis_n);
           }
         );
@@ -85,8 +85,7 @@
         categories = <%= raw @data[:categories] %>,
         name = '<%= raw @data[:name] %>',
         level = <%= raw @data[:level] %>,
-        data = <%= raw @data[:data].to_json %>,
-        default_units = '<%= raw @data[:units] %>';
+        data = <%= raw @data[:data].to_json %>;
    
     chart = new Highcharts.Chart({
       chart: {
@@ -117,7 +116,7 @@
         {
           type: "column",
           title: {
-            text: default_units,
+            text: "<%= raw @data[:units] %>",
             style: {
               color: '#4572A7'
             }
@@ -178,23 +177,10 @@
                     unit: this.unit,
                     type: this.type,
                     axis: this.axis,
+                    all: true,
                     id: <%= @household.id %> }, 
                   function(drilldown) {
-                    // if (this.level!=3) { // drill down
                     setChart(drilldown, chartType, true, 0);
-                    // } else { // restore
-                    //   console.log("restore");
-                    //   chart.setTitle({
-                    //     text: chartTitle
-                    //   });
-                    //   setChart({
-                    //     name: name, 
-                    //     categories: categories, 
-                    //     data: data, 
-                    //     level: level,
-                    //     units: default_units
-                    //   }, colors[0], chartType);
-                    // }
                   }
                 );
               }
@@ -216,31 +202,22 @@
           }               
         }
       },
-      // tooltip: {
-      //    formatter: function() {
-      //       var point = this.point, s = '';
-            
-      //        switch (this.series.options.level) {
-      //           case 0:
-      //               s = 'LEVEL ONE<br/>';
-      //               s += ' INSTRUCTIONS HERE 111';
-      //               break;
-                
-      //           case 1:
-      //               s = 'LEVEL TWO INSTRUCTIONS HERE <br/>';
-      //               s += ' INSTRUCTIONS HERE 222';
-      //               break;
-                
-      //           case 2:
-      //               s = 'LEVEL THREE INSTRUCTIONS HERE<br/>';
-      //               s += 'INSTRUCTIONS HERE 333';
-      //               break;
-      //        }
-             
-             
-      //       return s;
-      //    }
-      // },
+      tooltip: {
+        formatter: function() {
+          var point = this.point;
+
+          if(point.results){
+            s =  "Cost: " + point.results.energy_cost.join(" ") + ' <br/>';
+            s += "Usage: " + point.results.amount.join(" ") + ' <br/>';
+            s += "Carbon intensity: " + point.results.carbon_intensity.join(" ") + ' <br/>';
+            s += "CO2 generated: " + point.results.carbon_result.join(" ") + ' <br/>';
+          }else{
+            s = point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
+          }
+
+          return s;
+        }
+      },
       series: [{
         name: name,
         level: level,
