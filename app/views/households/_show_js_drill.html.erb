@@ -6,6 +6,10 @@
       });
       chart.xAxis[0].setCategories(drilldown.categories);
       chart.series[0].remove();
+      $(".totals#date").html(drilldown.chart_name);
+      $.each(drilldown.totals, function(property, value) {
+        $(".totals#"+property).html(value);        
+      });
     }
     chart.yAxis[yAxis].setTitle({text: drilldown.units});
 
@@ -27,6 +31,10 @@
     $(".period-shown #unit").val(drilldown.unit);
     $(".period-shown #date").val(drilldown.date);
     $(".period-shown #type").val(drilldown.type);
+  }
+
+  function writeTotals(totals) {
+    $(".totals#date").html(totals.energy_cost);
   }
 
   function changeType(series, newType) {
@@ -215,7 +223,7 @@
           }else{
             s += point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
           }
-          
+
           return s;
         }
       },

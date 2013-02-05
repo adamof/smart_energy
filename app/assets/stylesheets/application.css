@@ -21,3 +21,10 @@ body {
 .chart-toggler {
   margin-left: 10px !important;
 }
+
+.totals_container{
+  padding-top: 260px;
+}
+span.totals{
+  font-weight: bold;
+}

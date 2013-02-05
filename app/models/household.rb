@@ -103,7 +103,7 @@ class Household < ActiveRecord::Base
       operation = "AVG"
       y_divider = 1
     when "energy_cost"
-      y_divider = 100 if unit_divider != 1
+      y_divider = (unit_divider != 1) ? 100 : unit_divider
     end
 
     if unit=="all"
@@ -112,7 +112,7 @@ class Household < ActiveRecord::Base
       readings = self.send(type).within(date, unit).aggregate_records(group, axis, operation, all)
     end
     sum=0
-    props = UNIT_COMBINATIONS.keys - ["cost", "carbon_intensity", "price"]
+    props = UNIT_COMBINATIONS.keys - ["carbon_intensity", "price"]
     totals = Hash.new(0)
     readings.each do |record|
       record_date = DateTime.strptime(record["period_date"], "%F %T")
@@ -124,6 +124,8 @@ class Household < ActiveRecord::Base
           totals[prop] += record[prop].to_f 
         end
       end
+      p record.attributes
+      p record[axis]
       data << { date: record_date.strftime("%F"),
                 y: (record[axis].to_f/y_divider).round(2),
                 results: all ? results : false,
@@ -142,7 +144,7 @@ class Household < ActiveRecord::Base
       categories: categories,
       level: level,
       color: color,
-      totals: totals
+      totals: totals.each{ |k,v| totals[k] = "#{(v/(k=='energy_cost' ? y_divider : unit_divider)).round(2)} #{UNIT_COMBINATIONS[k][unit]}" }
     }    
   end
 
