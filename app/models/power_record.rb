@@ -9,6 +9,6 @@ class PowerRecord < Record
 
   def calc_cost
     self.price = 12
-    self.cost = (self.price * self.amount)/1000.0
+    self.energy_cost = (self.price * self.amount)/1000.0
   end  
 end
