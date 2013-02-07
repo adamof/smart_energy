@@ -139,7 +139,7 @@ class Household < ActiveRecord::Base
       units: units,
       # make the name be describing - Electricity, CO2, Gas, money
       chart_name: chart_name,
-      series_name: series_name,
+      series_name: series_name  + " " + chart_name,
       data: data,
       categories: categories,
       level: level,

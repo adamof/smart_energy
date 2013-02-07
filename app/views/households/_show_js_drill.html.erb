@@ -71,7 +71,6 @@
           type = $(this).attr("series_type");
 
       if(this.checked){
-        // TODO add the axis
         $.getJSON("<%= readings_household_path %>", 
           { date: $(".period-shown #date").val(),
             unit: $(".period-shown #unit").val(),
@@ -85,6 +84,27 @@
         );
       }else{
         chart.yAxis[axis_n].series[0].destroy();
+      }
+    });
+
+    $(".comparison_toggler").change(function () {
+      if(this.checked){
+        var date = new Date($(".period-shown #date").val());
+        date.setMonth(date.getMonth() - 12);
+        $.getJSON("<%= readings_household_path %>",  
+          { date: date.toISOString().slice(0,10),
+            unit: $(".period-shown #unit").val(),
+            type: $(".period-shown #type").val(),
+            axis: "energy_cost",
+            all: true,
+            id: <%= @household.id %> },
+          function (result) {
+            result["color"] = "#800080";
+            setChart(result, "column", false, 0);
+          }
+        );
+      }else{
+        chart.yAxis[0].series[1].destroy();
       }
     });
 
