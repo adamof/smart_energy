@@ -38,10 +38,6 @@
       $("#comparison_container").slideDown("slow");
   }
 
-  function writeTotals(totals) {
-    $(".totals#date").html(totals.energy_cost);
-  }
-
   function changeType(series, newType) {
     var dataArray = [],
         points = series.data;
@@ -72,6 +68,59 @@
     return date.toISOString().slice(0,10)
   }
 
+  function disableAxes() {
+    var toggler = $("input#last_period");
+    if (toggler.is(":checked")){
+      chart.yAxis[0].series[1].destroy();
+      toggler.attr("checked", false);
+    }
+    while(chart.series.length > 1)
+      chart.series[1].remove(true);
+  }
+
+  function enableAxes() {
+    $.each($(".chart-toggler"), function(index, value) {
+      toggleAxis(value);
+    });
+  }
+
+  function toggleAxis(toggler) {
+    var axis = toggler.value,
+        axis_n = parseInt($(toggler).attr("axis_n")),
+        color = $(toggler).attr("color"),
+        type = $(toggler).attr("series_type");
+
+    if(toggler.checked){
+      $.getJSON("<%= readings_household_path %>", 
+        { date: $(".period-shown #date").val(),
+          unit: $(".period-shown #unit").val(),
+          type: $(".period-shown #type").val(),
+          axis: axis,
+          all: false,
+          id: <%= @household.id %> },
+        function (result) {
+          setChart(result, type, false, axis_n);
+        }
+      );
+    }else{
+      chart.yAxis[axis_n].series[0].destroy();
+    }
+  }
+
+  function drilldown(point) {
+    $.getJSON("<%= readings_household_path %>", 
+      { date: point.date,
+        unit: point.unit,
+        type: point.type,
+        axis: point.axis,
+        all: true,
+        id: <%= @household.id %> }, 
+      function(result) {
+        setChart(result, chartType, true, 0);
+      }
+    );    
+  }
+
   $(function(){
     chartType = "<%= current_user.try(:chart_type) || 'column' %>";
 
@@ -85,26 +134,7 @@
     });
 
     $(".chart-toggler").change(function() {
-      var axis = this.value,
-          axis_n = parseInt($(this).attr("axis_n")),
-          color = $(this).attr("color"),
-          type = $(this).attr("series_type");
-
-      if(this.checked){
-        $.getJSON("<%= readings_household_path %>", 
-          { date: $(".period-shown #date").val(),
-            unit: $(".period-shown #unit").val(),
-            type: $(".period-shown #type").val(),
-            axis: axis,
-            all: false,
-            id: <%= @household.id %> },
-          function (result) {
-            setChart(result, type, false, axis_n);
-          }
-        );
-      }else{
-        chart.yAxis[axis_n].series[0].destroy();
-      }
+      toggleAxis(this);
     });
 
     $(".comparison_toggler").change(function () {
@@ -204,24 +234,9 @@
             events: {
               click: function() {
                 writePeriod(this);
-                var toggler = $("input#last_period");
-                if (toggler.is(":checked")){
-                  chart.yAxis[0].series[1].destroy();
-                  toggler.attr("checked", false);
-                }
-                // TODO check to see which toggles we have on
-                // so that I can load them as well maybe in a single call?
-                $.getJSON("<%= readings_household_path %>", 
-                  { date: this.date,
-                    unit: this.unit,
-                    type: this.type,
-                    axis: this.axis,
-                    all: true,
-                    id: <%= @household.id %> }, 
-                  function(drilldown) {
-                    setChart(drilldown, chartType, true, 0);
-                  }
-                );
+                disableAxes();
+                drilldown(this);
+                enableAxes();
               }
             }
           },
