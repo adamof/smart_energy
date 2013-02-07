@@ -32,8 +32,10 @@
     $(".period-shown #date").val(drilldown.date);
     $(".period-shown #type").val(drilldown.type);
     $("label#last_period span").text("Previous " + drilldown.unit);
-    $("#comparison_container").slideDown("slow");
-    $("input#same_month").removeAttr("disabled");
+    if($("#unit").val()=="all")
+      $("#comparison_container").slideUp("slow");
+    else
+      $("#comparison_container").slideDown("slow");
   }
 
   function writeTotals(totals) {
@@ -125,20 +127,12 @@
     });
 
     var colors = Highcharts.getOptions().colors;
-        // chartTitle = 'Yearly <%= @type %> usage',
-        // categories = <%= raw @data[:categories] %>,
-        // name = '<%= raw @data[:name] %>',
-        // level = <%= raw @data[:level] %>,
-        // data = <%= raw @data[:data].to_json %>;
    
     chart = new Highcharts.Chart({
       chart: {
         renderTo: 'chart_container',
         type: chartType
       },
-      // title: {
-        // text: "Usage"
-      // },
       subtitle: {
         text: 'Click on a column to view monthly usage. Click again to view daily usage.'
       },
@@ -151,10 +145,6 @@
             fontFamily: "Verdana, sans-serif"
           }
         },
-        // gridLineColor: "#bfbfc0",
-        // gridLineDashStyle: "ShortDash",
-        // gridLineWidth: "1",
-        // categories: categories                
       },
       yAxis: [
         {
@@ -214,6 +204,11 @@
             events: {
               click: function() {
                 writePeriod(this);
+                var toggler = $("input#last_period");
+                if (toggler.is(":checked")){
+                  chart.yAxis[0].series[1].destroy();
+                  toggler.attr("checked", false);
+                }
                 // TODO check to see which toggles we have on
                 // so that I can load them as well maybe in a single call?
                 $.getJSON("<%= readings_household_path %>", 
@@ -254,7 +249,6 @@
           if(point.results){
             s +=  "Cost: " + point.y + " " + point.series.yAxis.axisTitle.text + ' <br/>';
             s += "Usage: " + point.results.amount.join(" ") + ' <br/>';
-            // s += "Carbon intensity: " + point.results.carbon_intensity.join(" ") + ' <br/>';
             s += "CO2 generated: " + point.results.carbon_result.join(" ") + ' <br/>';
           }else{
             s += point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
