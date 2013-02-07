@@ -31,6 +31,9 @@
     $(".period-shown #unit").val(drilldown.unit);
     $(".period-shown #date").val(drilldown.date);
     $(".period-shown #type").val(drilldown.type);
+    $("label#last_period span").text("Previous " + drilldown.unit);
+    $("#comparison_container").slideDown("slow");
+    $("input#same_month").removeAttr("disabled");
   }
 
   function writeTotals(totals) {
@@ -50,6 +53,21 @@
     }, false);
     
     series.remove();
+  }
+
+  function previous_period() {
+    var date = new Date($(".period-shown #date").val()),
+        unit = $("#unit").val();
+
+    if(unit=="year")
+      date.setMonth(date.getMonth() - 12);
+    else
+      if(unit=="month")
+        date.setMonth(date.getMonth() - 1);
+      else
+        date.setDate(date.getDate() - 1);
+
+    return date.toISOString().slice(0,10)
   }
 
   $(function(){
@@ -89,10 +107,8 @@
 
     $(".comparison_toggler").change(function () {
       if(this.checked){
-        var date = new Date($(".period-shown #date").val());
-        date.setMonth(date.getMonth() - 12);
         $.getJSON("<%= readings_household_path %>",  
-          { date: date.toISOString().slice(0,10),
+          { date: previous_period,
             unit: $(".period-shown #unit").val(),
             type: $(".period-shown #type").val(),
             axis: "energy_cost",

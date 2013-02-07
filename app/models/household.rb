@@ -104,6 +104,8 @@ class Household < ActiveRecord::Base
       y_divider = 1
     when "energy_cost"
       y_divider = (unit_divider != 1) ? 100 : unit_divider
+    else
+      y_divider = unit_divider
     end
 
     if unit=="all"
