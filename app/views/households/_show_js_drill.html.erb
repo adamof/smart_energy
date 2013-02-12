@@ -88,11 +88,12 @@
 
   function enableAxes() {
     $.each($(".chart-toggler"), function(index, value) {
-      toggleAxis(value);
+      if(value.checked)
+        toggleAxis(value, false);
     });
   }
 
-  function toggleAxis(toggler) {
+  function toggleAxis(toggler,click) {
     var axis = toggler.value,
         axis_n = parseInt($(toggler).attr("axis_n")),
         color = $(toggler).attr("color"),
@@ -112,6 +113,8 @@
       );
     }else{
       chart.yAxis[axis_n].series[0].destroy();
+      if(click)
+        chart.yAxis[axis_n].destroy();
     }
   }
 
@@ -142,7 +145,7 @@
     });
 
     $(".chart-toggler").change(function() {
-      toggleAxis(this);
+      toggleAxis(this, true);
     });
 
     $(".comparison_toggler").change(function () {

@@ -15,34 +15,34 @@ class Household < ActiveRecord::Base
 
   UNIT_COMBINATIONS = {
     "amount" => {
-      "day" => "Wh",
-      "month" => "kWh",
-      "year" => "mWh",
-      "all" => "mWh"
+      "day" => { "unit" => "Wh", "divider" => 1 },
+      "month" => { "unit" => "kWh", "divider" => 1000 },
+      "year" => { "unit" => "MWh", "divider" => 1000000 },
+      "all" => { "unit" => "MWh", "divider" => 1000000 },
     },
     "carbon_result" => {
-      "day" => "grams CO2",
-      "month" => "kg CO2",
-      "year" => "kg CO2",
-      "all" => "tons CO2"
+      "day" => { "unit" => "grams CO2", "divider" => 1 },
+      "month" => { "unit" => "kg CO2", "divider" => 1000 },
+      "year" => { "unit" => "kg CO2", "divider" => 1000 },
+      "all" => { "unit" => "tons CO2", "divider" => 1000000 },
     },
     "carbon_intensity" => {
-      "day" => "grams/kWh",
-      "month" => "grams/kWh",
-      "year" => "grams/kWh",
-      "all" => "grams/kWh"
+      "day" => { "unit" => "grams/kWh", "divider" => 1 },
+      "month" => { "unit" => "grams/kWh", "divider" => 1 },
+      "year" => { "unit" => "grams/kWh", "divider" => 1 },
+      "all" => { "unit" => "grams/kWh", "divider" => 1 },
     },
     "price" => {
-      "day" => "pence/kWh",
-      "month" => "pence/kWh",
-      "year" => "pence/kWh",
-      "all" => "pence/kWh"
+      "day" => { "unit" => "pence/kWh", "divider" => 1 },
+      "month" => { "unit" => "pence/kWh", "divider" => 1 },
+      "year" => { "unit" => "pence/kWh", "divider" => 1 },
+      "all" => { "unit" => "pence/kWh", "divider" => 1 },
     },
     "energy_cost" => {
-      "day" => "pence",
-      "month" => "pounds",
-      "year" => "pounds",
-      "all" => "pounds"
+      "day" => { "unit" => "pence", "divider" => 1 },
+      "month" => { "unit" => "pounds", "divider" => 100 },
+      "year" => { "unit" => "pounds", "divider" => 100 },
+      "all" => { "unit" => "pounds", "divider" => 100 },
     }
   }
 
@@ -60,7 +60,8 @@ class Household < ActiveRecord::Base
     # type = energy == "gas" ? "gas_records" : "power_records"
     type = energy
     series_name = NAME_COMBINATIONS["#{type}_#{axis}"]
-    units = UNIT_COMBINATIONS[axis][unit]
+    units = UNIT_COMBINATIONS[axis][unit]["unit"]
+    divider = UNIT_COMBINATIONS[axis][unit]["divider"]
     color = COLORS[axis]
     operation = "sum"
 
@@ -71,41 +72,31 @@ class Household < ActiveRecord::Base
       frmt_time = "%H:%M"
       child_unit = "all"
       level = 3
-      unit_divider = 1
     when "month"
       chart_name = date.strftime("%B %Y")
       group = "day"
       frmt_time = "%d"
       child_unit = "day"
       level = 2
-      unit_divider = 1000
     when "year"
       chart_name = date.strftime("%Y")
       group = "month"
       frmt_time = "%B"
       child_unit = "month"
       level = 1
-      unit_divider = 1000
     else
       chart_name = "All time usage"
       group = "year"
       frmt_time = "%Y"
       child_unit = "year"
       level = 0
-      unit_divider = 1000000
     end
 
     case axis 
     when "carbon_intensity"
       operation = "AVG"
-      y_divider = 1
     when "price"
       operation = "AVG"
-      y_divider = 1
-    when "energy_cost"
-      y_divider = (unit_divider != 1) ? 100 : unit_divider
-    else
-      y_divider = unit_divider
     end
 
     if unit=="all"
@@ -122,14 +113,14 @@ class Household < ActiveRecord::Base
       if all
         results = {}
         props.each do |prop|
-          results[prop] = [(record[prop].to_f/unit_divider).round(2), UNIT_COMBINATIONS[prop][unit]]
+          results[prop] = [(record[prop].to_f/UNIT_COMBINATIONS[prop][unit]["divider"]).round(2), UNIT_COMBINATIONS[prop][unit]["unit"]]
           totals[prop] += record[prop].to_f 
         end
       end
       p record.attributes
       p record[axis]
       data << { date: record_date.strftime("%F"),
-                y: (record[axis].to_f/y_divider).round(2),
+                y: (record[axis].to_f/divider).round(2),
                 results: all ? results : false,
                 unit: child_unit,
                 level: level-1,
@@ -146,7 +137,7 @@ class Household < ActiveRecord::Base
       categories: categories,
       level: level,
       color: color,
-      totals: totals.each{ |k,v| totals[k] = "#{(v/(k=='energy_cost' ? y_divider : unit_divider)).round(2)} #{UNIT_COMBINATIONS[k][unit]}" }
+      totals: totals.each{ |k,v| totals[k] = "#{(v/UNIT_COMBINATIONS[k][unit]["divider"]).round(2)} #{UNIT_COMBINATIONS[k][unit]["unit"]}" }
     }    
   end
 
