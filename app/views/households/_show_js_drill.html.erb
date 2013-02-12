@@ -27,6 +27,14 @@
     });
   }
 
+  function addMainSeries (argument) {
+    // body...
+  }
+
+  function addExtraSeries (argument) {
+    // body...
+  }
+
   function writePeriod (drilldown) {
     $(".period-shown #unit").val(drilldown.unit);
     $(".period-shown #date").val(drilldown.date);
@@ -157,6 +165,8 @@
     });
 
     var colors = Highcharts.getOptions().colors;
+    var main_axes = {},
+        extra_axes = {};
    
     chart = new Highcharts.Chart({
       chart: {

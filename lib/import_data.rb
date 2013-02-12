@@ -5,7 +5,9 @@ module ImportData
   end
   def self.init(n=nil)
     self.delete_data
-    self.import_usage("readings_2010.xls", n)
+    self.import_intensities("intensities.2010.csv")
+    self.import_intensities("intensities.2011.csv")
+    self.import_usage("readings_mod.xls", n)
   end
   def self.import_usage(file, n_households=0)
     s = Excel.new(file)
@@ -14,7 +16,6 @@ module ImportData
       household = s.cell(line,'A')
       amount     = s.cell(line,'B')
       date      = s.cell(line,'C')
-      puts "#{line}: #{household}, #{amount}, #{date}"
       household = Household.find_or_create_by_name(household.to_s)
       # if Household.count==n_households+1
       #   household.delete
@@ -37,12 +38,9 @@ module ImportData
       last_record = this
     end
   end
-  def fix_data
-    
-  end
-  def self.import_intensities
-    # CarbonRecord.delete_all
-    CSV.foreach("intensities.2010.csv", headers: false) do |r|
+
+  def self.import_intensities(file)
+    CSV.foreach(file, headers: false) do |r|
       CarbonRecord.create!( period_end: DateTime.strptime(r[0], "%Y/%m/%d %H:%M"),
                             amount: r[1] )
     end
