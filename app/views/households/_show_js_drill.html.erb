@@ -27,14 +27,20 @@
     });
   }
 
-  function addMainSeries (argument) {
-    // body...
+  function init_graph() {
+    $.getJSON("<%= readings_household_path %>", 
+      { date: "<%= @date %>",
+        unit: "<%= @unit %>",
+        type: "<%= @type %>",
+        axis: "<%= @axis %>",
+        all: true,
+        id: <%= @household.id %> }, 
+      function(drilldown) {
+        setChart(drilldown, chartType, true, 0);
+      }
+    );
+    $("#comparison_container").slideUp("slow");
   }
-
-  function addExtraSeries (argument) {
-    // body...
-  }
-
   function writePeriod (drilldown) {
     $(".period-shown #unit").val(drilldown.unit);
     $(".period-shown #date").val(drilldown.date);
@@ -134,6 +140,12 @@
 
   $(function(){
     chartType = "<%= current_user.try(:chart_type) || 'column' %>";
+
+    $("#reset_graph").click(function() {
+      disableAxes();
+      init_graph();
+      $(".chart-toggler").attr("checked", false);
+    })
 
     $('#chart_type').change(function() {
       chartType = $(this).val();
@@ -291,16 +303,6 @@
       }
     });
 
-    $.getJSON("<%= readings_household_path %>", 
-      { date: "<%= @date %>",
-        unit: "<%= @unit %>",
-        type: "<%= @type %>",
-        axis: "<%= @axis %>",
-        all: true,
-        id: <%= @household.id %> }, 
-      function(drilldown) {
-        setChart(drilldown, chartType, true, 0);
-      }
-    );
+    init_graph();
   });
 <% end %>
