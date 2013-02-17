@@ -7,6 +7,8 @@ SmartEnergy::Application.routes.draw do
     end
   end
 
+  match 'survey' => 'households#chart_drill', :defaults => { :id => Household.last.id }
+
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
