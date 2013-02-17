@@ -310,7 +310,12 @@
                   return
                 writePeriod(this.unit, this.date, this.type);
                 disableAxes();
-                drilldown(this);
+                drilldown({
+                  date: this.date,
+                  unit: this.unit,
+                  type: this.type,
+                  axis: this.axis
+                });
                 enableAxes();
               }
             }
