@@ -39,17 +39,26 @@
         setChart(drilldown, chartType, true, 0);
       }
     );
-    $("#comparison_container").slideUp("slow");
+    comparison_container.slideUp("slow");
   }
-  function writePeriod (drilldown) {
-    $(".period-shown #unit").val(drilldown.unit);
-    $(".period-shown #date").val(drilldown.date);
-    $(".period-shown #type").val(drilldown.type);
-    $("label#last_period span").text("Previous " + drilldown.unit);
-    if($("#unit").val()=="all")
-      $("#comparison_container").slideUp("slow");
-    else
-      $("#comparison_container").slideDown("slow");
+  function writePeriod (unit, date, type) {
+    $(".period-shown #unit").val(unit);
+    $(".period-shown #date").val(date);
+    $(".period-shown #type").val(type);
+    $("label#last_period span").text("Previous " + unit);
+
+    if($("#unit").val()=="all"){
+      comparison_container.slideUp("slow");
+      $(".graph_nav").attr("disabled", 1);
+      var button_txt = ""
+    }else{
+      comparison_container.slideDown("slow");
+      $(".graph_nav").removeAttr("disabled");
+      var button_txt = unit
+    }
+
+    $("#prev_period").val("Previous " + button_txt);
+    $("#next_period").val("Next " + button_txt);
   }
 
   function changeType(series, newType) {
@@ -78,6 +87,20 @@
         date.setMonth(date.getMonth() - 1);
       else
         date.setDate(date.getDate() - 1);
+
+    return date.toISOString().slice(0,10)
+  }
+  function next_period() {
+    var date = new Date($(".period-shown #date").val()),
+        unit = $("#unit").val();
+
+    if(unit=="year")
+      date.setMonth(date.getMonth() + 12);
+    else
+      if(unit=="month")
+        date.setMonth(date.getMonth() + 1);
+      else
+        date.setDate(date.getDate() + 1);
 
     return date.toISOString().slice(0,10)
   }
@@ -141,6 +164,10 @@
   $(function(){
     chartType = "<%= current_user.try(:chart_type) || 'column' %>";
 
+    comparison_container = $("#comparison_container");
+    prev_period_button = $("input#prev_period");
+    next_period_button = $("input#next_period");
+
     $("#reset_graph").click(function() {
       disableAxes();
       init_graph();
@@ -158,6 +185,24 @@
 
     $(".chart-toggler").change(function() {
       toggleAxis(this, true);
+    });
+
+    $(".graph_nav").click(function() {
+      if(this.id=="prev_period")
+        var new_date = previous_period();
+      else
+        var new_date = next_period()
+      writePeriod($(".period-shown #unit").val(),
+                  new_date, 
+                  $(".period-shown #type").val());
+      disableAxes();
+      drilldown({
+        unit: $(".period-shown #unit").val(),
+        date: new_date, 
+        type: $(".period-shown #type").val(),
+        axis: "energy_cost"
+      });
+      enableAxes();
     });
 
     $(".comparison_toggler").change(function () {
@@ -258,7 +303,9 @@
           point: {
             events: {
               click: function() {
-                writePeriod(this);
+                if(this.axis!='energy_cost')
+                  return
+                writePeriod(this.unit, this.date, this.type);
                 disableAxes();
                 drilldown(this);
                 enableAxes();

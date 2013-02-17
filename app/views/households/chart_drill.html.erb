@@ -47,7 +47,7 @@
                         selected: current_user.try(:chart_type) || "column" %>
           </div> -->
           <div class="span3">
-            <input class="pull-left btn-primary btn span2" id="prev_period" type="button" value="Previous"> 
+            <input class="graph_nav pull-left btn-primary btn span2" disabled="true" id="prev_period" type="button" value="Previous"> 
           </div>
           <div class="span4">
             <span class="pull-left">
@@ -68,7 +68,7 @@
             <%= label_tag "price_toggler", "Energy price", class: "pull-left" %>
           </div>
           <div class="span3">
-            <input class="pull-right btn-primary btn span2" id="next_period" type="button" value="Next"> 
+            <input class="graph_nav pull-right btn-primary btn span2" disabled="true" id="next_period" type="button" value="Next"> 
           </div>
         </div>
       </div>
