@@ -4,11 +4,16 @@
         survey = $(".row#survey iframe"),
         graph = $("#graph");
 
-    // $("#proceed_eval").click(function(argument) {
+    $("#proceed_eval").click(function(argument) {
       description.slideUp("slow");
       survey.attr("height", 260);
       graph.slideDown("slow");
       $("#proceed_eval").hide();
-    // })
+    });
+
+    graph.show();
+    description.hide();
+    survey.hide();
+
   });
 <% end %>

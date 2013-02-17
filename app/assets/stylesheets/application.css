@@ -32,3 +32,6 @@ span.totals{
   margin-top: 20px;
   float: right;
 }
+input#proceed_eval{
+  margin-top: 20px;
+}
