@@ -13,6 +13,8 @@ class Household < ActiveRecord::Base
     "gas_records_carbon_result" => "CO2 generated"
   }
 
+  UNITS=["day", "month", "year", "all"]
+
   UNIT_COMBINATIONS = {
     "amount" => {
       "day" => { "unit" => "Wh", "divider" => 1 },
@@ -137,96 +139,13 @@ class Household < ActiveRecord::Base
       categories: categories,
       level: level,
       color: color,
-      totals: totals.each{ |k,v| totals[k] = "#{(v/UNIT_COMBINATIONS[k][unit]["divider"]).round(2)} #{UNIT_COMBINATIONS[k][unit]["unit"]}" }
+      totals: totals.each{ |k,v| totals[k] = "#{(v/UNIT_COMBINATIONS[k][next_unit(unit)]["divider"]).round(2)} #{UNIT_COMBINATIONS[k][next_unit(unit)]["unit"]}" }
     }    
   end
 
-  # def get_readings_for(energy, from, to, unit="day", with_date = true)
-  #   type = energy == "gas" ? "GasRecord" : "PowerRecord"
-  #   readings = self.energy_records.where("period_end >= ? AND period_end < ? AND type = ? ", from, to + 1.day, type).order("period_end")
-  #   # res = readings.map{|r| r.usage}
-  #   time_unit = case unit
-  #   when "hour"
-  #     :beginning_of_hour
-  #   when "day"
-  #     :beginning_of_day
-  #   when "week"
-  #     :beginning_of_week
-  #   when "month"
-  #     :beginning_of_month
-  #   end
-  #   if with_date
-  #     return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| [k.to_time.to_i*1000, v.map{|r| r.usage}.sum.round(2)]}
-  #   else
-  #     return readings.group_by{ |u| u.period_end.send(time_unit) }.map {|k,v| v.map{|r| r.usage}.sum.round(2)}
-  #   end
-  # end
-
-  # def all_readings(energy)
-  #   result = {}
-  #   type = energy == "gas" ? "GasRecord" : "PowerRecord"
-  #   readings = self.energy_records.where("type = ?", type).order("period_end")
-
-  #   readings.each do |reading|
-  #     year = reading.period_end.strftime("%Y")
-  #     month = reading.period_end.strftime("%B")
-  #     day = reading.period_end.strftime("%d")
-  #     hour = reading.period_end.strftime("%H:%M")
-  #     usage = reading.usage
-
-  #     result[year] = result[year] || {"name" => year, "y" => 0, "drilldown" => {}}
-  #     result[year]["drilldown"][month] = result[year]["drilldown"][month] || {"name" => "#{month} #{year}", "y" => 0, "drilldown" => {}}
-  #     result[year]["drilldown"][month]["drilldown"][day] = result[year]["drilldown"][month]["drilldown"][day] || {"name" => "#{day} #{month} #{year}", "y" => 0, "drilldown" => {}}
-      
-  #     result[year]["y"] += usage
-  #     result[year]["drilldown"][month]["y"] += usage
-  #     result[year]["drilldown"][month]["drilldown"][day]["y"] += usage
-
-  #     result[year]["drilldown"][month]["drilldown"][day]["drilldown"][hour] = usage
-  #   end
-  #   return format_result result
-  # end
-
-  # def format_result(result)
-  #   data = []
-  #   result.each do |year, v1|
-  #     data << v1
-  #   end
-  #   data.each do |year|
-  #     drilldown = {}
-  #     drilldown["name"] = year["name"]
-  #     drilldown["categories"] = year["drilldown"].keys
-  #     drilldown["level"] = 1
-  #     drilldown["data"] = [] #??
-  #     year["drilldown"].each do |_month, month|
-  #       drilldown2 = {}
-  #       drilldown2["name"] = month["name"]
-  #       drilldown2["categories"] = month["drilldown"].keys
-  #       drilldown2["level"] = 2
-  #       drilldown2["data"] = []
-  #       month["drilldown"].each do |_day, day|
-  #         drilldown3 = {}
-  #         drilldown3["name"] = day["name"]
-  #         drilldown3["categories"] = day["drilldown"].keys
-  #         drilldown3["level"] = 3
-  #         drilldown3["data"] = day["drilldown"].values
-  #         drilldown2["data"] << {"y" => day["y"], "drilldown" => drilldown3}
-  #       end
-  #       drilldown["data"] << {"y" => month["y"], "drilldown" => drilldown2}
-  #     end
-  #     year["drilldown"] = drilldown
-  #   end
-  # end
-
-  # def measuring_units(max, type)
-  #   case type
-  #   when "energy_records"
-  #     if max > 
-  #   when "gas_records"
-
-  #   when "carbon_records"
-      
-  #   end
-      
-  # end
+  private
+  def next_unit(unit)
+    return "all" if unit=="all"
+    UNITS[(UNITS.index(unit)+1)%UNITS.length]
+  end
 end

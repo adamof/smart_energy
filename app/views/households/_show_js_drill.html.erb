@@ -40,6 +40,9 @@
       }
     );
     comparison_container.slideUp("slow");
+    $("#prev_period").val("Previous");
+    $("#next_period").val("Next");
+    $(".graph_nav").attr("disabled", 1);
   }
   function writePeriod (unit, date, type) {
     $(".period-shown #unit").val(unit);
