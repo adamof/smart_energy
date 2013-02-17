@@ -101,7 +101,7 @@ class HouseholdsController < ApplicationController
   end
 
   def chart_drill
-    @household = Household.find(params[:id])
+    @household = Household.find_by_id(params[:id]) || Household.last 
     @type = "power_records"
     @date = Time.now
     @unit = "all"
