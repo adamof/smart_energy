@@ -3,6 +3,7 @@
     <div class="span12">
       <h2>Smart meter web application evaluation.</h2>
       <h4>Hello and thank you for taking the time to help me with my honours project!</h4>
+      <p>The evaluation process will take you no more than 10 minutes.</p>
       <h4>Background</h4>
       <p>
         As part of my honours project I have developed a software which provides the same functionality as the meters that will be going into homes and it will be used as part of a major project - <a href="http://www.energyoracle.org/">IDEAL project</a> at the <a href="http://www.ed.ac.uk/">University of Edinburgh</a>. This project will focus on examining the effect of providing personalised behavioural feedback to occupants: explicitly identifying the behaviours (e.g., showering and bathing, room heating, major appliance use) that account for energy use/expenditure; and how these could be reduced.
@@ -21,7 +22,6 @@
   </div>
   <div id="survey" class="row">
     <div class="span12">
-      <!-- <h2>Smart meter web application evaluation.</h2> -->
         <iframe src="https://docs.google.com/forms/d/1ddQznpYcJEBs6fxJ4I1rfeB9QOUCz5zOWuDXj8LpAVA/viewform?embedded=true" width="920" height="580" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 
     <input class="btn" id="proceed_eval" type="button" value="Show the app"> 
@@ -40,12 +40,6 @@
             <%= hidden_field_tag "date", @date %>
             <%= hidden_field_tag "unit", @unit %>
           </div>
-      <!--    <div class="span4">
-             <%= select  "chart", 
-                        "type", 
-                        CHART_TYPES, 
-                        selected: current_user.try(:chart_type) || "column" %>
-          </div> -->
           <div class="span3">
             <input class="graph_nav pull-left btn-primary btn span2" disabled="true" id="prev_period" type="button" value="Previous"> 
           </div>
@@ -74,6 +68,8 @@
       </div>
       <div class="span2">
         <input class="span2 btn-success btn" id="reset_graph" type="button" value="Reset graph"> 
+        <input class="btn span2 btn-danger" id="proceed_final" type="button" value="Finish evaluation"> 
+
         <div class="span2 right_container">
           Totals for the period:
           <span id="date" class="totals">All time</span> <br/>

@@ -28,7 +28,7 @@ body {
 span.totals{
   font-weight: bold;
 }
-#reset_graph{
+#reset_graph, #proceed_final{
   margin-top: 20px;
   float: right;
 }

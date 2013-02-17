@@ -11,6 +11,12 @@
       $("#proceed_eval").hide();
     });
 
+    $("#proceed_final").click(function(argument) {
+      survey.attr("height", 1000);
+      graph.slideUp("slow");
+      $("#proceed_eval").show();
+    });
+
     // graph.show();
     // description.hide();
     // survey.hide();
