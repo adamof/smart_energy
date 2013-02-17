@@ -5,7 +5,9 @@
         text: drilldown.chart_name
       });
       chart.xAxis[0].setCategories(drilldown.categories);
-      chart.series[0].remove();
+      // chart.series[0].remove();
+      while(chart.series.length > 0)
+        chart.series[0].remove(true);
       $(".totals#date").html(drilldown.chart_name);
       $.each(drilldown.totals, function(property, value) {
         $(".totals#"+property).html(value);        
@@ -39,7 +41,7 @@
         setChart(drilldown, chartType, true, 0);
       }
     );
-    
+
     comparison_container.slideUp("slow");
     $("#prev_period").val("Previous");
     $("#next_period").val("Next");
@@ -115,8 +117,6 @@
       chart.yAxis[0].series[1].destroy();
       toggler.attr("checked", false);
     }
-    while(chart.series.length > 1)
-      chart.series[1].remove(true);
   }
 
   function enableAxes() {
@@ -307,16 +307,17 @@
           point: {
             events: {
               click: function() {
-                if(this.axis!='energy_cost')
-                  return
-                writePeriod(this.unit, this.date, this.type);
-                disableAxes();
-                drilldown({
+                var params = {
                   date: this.date,
                   unit: this.unit,
                   type: this.type,
                   axis: this.axis
-                });
+                }
+                if(this.axis!='energy_cost') //|| (this.series.color == "#800080"))
+                  return
+                writePeriod(this.unit, this.date, this.type);
+                disableAxes();
+                drilldown(params);
                 enableAxes();
               }
             }
@@ -340,12 +341,12 @@
       tooltip: {
         formatter: function() {
           var point = this.point;
-          s = '<b>' + point.category + '</b> <br/>';
+          s = '<b>' + point.category + ' ' + point.chart_name + '</b> <br/>';
 
           if(point.results){
             s +=  "Cost: " + point.y + " " + point.series.yAxis.axisTitle.text + ' <br/>';
             s += "Usage: " + point.results.amount.join(" ") + ' <br/>';
-            s += "CO2 generated: " + point.results.carbon_result.join(" ") + ' <br/>';
+            s += "Carbon footprint: " + point.results.carbon_result.join(" ") + ' <br/>';
           }else{
             s += point.series.name + ": " + point.y + " " + point.series.yAxis.axisTitle.text;
           }

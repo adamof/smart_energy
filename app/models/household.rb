@@ -125,6 +125,7 @@ class Household < ActiveRecord::Base
                 y: (record[axis].to_f/divider).round(2),
                 results: all ? results : false,
                 unit: child_unit,
+                chart_name: chart_name,
                 level: level-1,
                 type: type,
                 axis: axis }
