@@ -52,6 +52,7 @@
     $(".period-shown #date").val(date);
     $(".period-shown #type").val(type);
     $("label#last_period span").text("Previous " + unit);
+    $("label#next_period_comp span").text("Next " + unit);
 
     if($("#unit").val()=="all"){
       comparison_container.slideUp("slow");
@@ -112,11 +113,12 @@
   }
 
   function disableAxes() {
-    var toggler = $("input#last_period");
-    if (toggler.is(":checked")){
-      chart.yAxis[0].series[1].destroy();
-      toggler.attr("checked", false);
-    }
+    $.each($(".comparison_toggler"), function(index, value) {
+      if(value.checked){
+        chart.yAxis[0].series[1].destroy();
+        value.checked=false;
+      }
+    });
   }
 
   function enableAxes() {
@@ -209,22 +211,35 @@
       enableAxes();
     });
 
+    var comparison_series=[1,2];
+
     $(".comparison_toggler").change(function () {
+      if(this.id=="last_period"){
+        var period = previous_period()
+            color = "#800080";
+            index = 0;
+      }else{
+        var period = next_period(),
+            color = "#FF7F00";
+            index = 1;
+      }
       if(this.checked){
         $.getJSON("<%= readings_household_path %>",  
-          { date: previous_period,
+          { date: period,
             unit: $(".period-shown #unit").val(),
             type: $(".period-shown #type").val(),
             axis: "energy_cost",
             all: true,
             id: <%= @household.id %> },
           function (result) {
-            result["color"] = "#800080";
+            result["color"] = color;
             setChart(result, "column", false, 0);
+            comparison_series[index]=chart.yAxis[0].series[chart.yAxis[0].series.length-1];
           }
         );
+
       }else{
-        chart.yAxis[0].series[1].destroy();
+        comparison_series[index].destroy();
       }
     });
 
