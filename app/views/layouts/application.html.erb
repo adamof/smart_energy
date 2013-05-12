@@ -25,17 +25,11 @@
         <div class="container">
           <a class="brand" href="#">Smart Energy</a>
           <ul class="nav">
-            <li class="<%= 'active' if current_page?(household_path((current_user.household))) %>">
-              <%= link_to "Dashboard", household_path(current_user.household) %>
+            <li class="<%= 'active' if current_page?(power_usage_household_path((current_user.household_id))) || current_page?(root_path) %>">
+              <%= link_to "Electricity", power_usage_household_path(current_user.household_id) %>
             </li>
-            <li class="<%= 'active' if current_page?(power_usage_household_path((current_user.household))) %>">
-              <%= link_to "Power", power_usage_household_path(current_user.household) %>
-            </li>
-            <li class="<%= 'active' if current_page?(gas_usage_household_path(current_user.household)) %>">
-              <%= link_to "Gas", gas_usage_household_path(current_user.household) %>
-            </li>
-            <li>
-              <a href="#">C02</a>
+            <li class="<%= 'active' if current_page?(gas_usage_household_path(current_user.household_id)) %>">
+              <%= link_to "Gas", gas_usage_household_path(current_user.household_id) %>
             </li>
           </ul>
           <ul class="nav pull-right">
@@ -54,7 +48,7 @@
       </div>
     </div>
   <% end %>
-  <div class="container">
+  <div class="container" style="margin-top: 40px;">
     <p class="notice"><%= notice %></p>
     <% if alert %>
       <p class="alert"><%= alert %></p>

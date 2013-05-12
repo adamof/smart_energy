@@ -1,0 +1,72 @@
+<div class="span12">
+  <div id="graph">
+    <div class="row">
+      <div class="span10">
+        <div class="row">
+          <div id="chart_container" class="span10" style="height: 500px;">
+          </div>
+        </div>
+        <div id="chart_controls" class="row">
+          <div class="period-shown">
+            <%= hidden_field_tag "type", @type %>
+            <%= hidden_field_tag "date", @date %>
+            <%= hidden_field_tag "unit", @unit %>
+          </div>
+          <div class="span3">
+            <input class="graph_nav pull-left btn-primary btn span2" disabled="true" id="prev_period" type="button" value="Previous"> 
+          </div>
+          <div class="span4">
+            <span class="pull-left">
+              Toggle: 
+            </span>
+            <%= check_box_tag "carbon_intensity_toggler", "carbon_intensity", false, class: "pull-left chart-toggler", color: 5, axis_n: 2, series_type: "line" %>
+            <%= label_tag "carbon_intensity_toggler", "CO2 intensity", class: "pull-left" %>
+            
+            <%= check_box_tag "carbon_toggler", "carbon_result", false, class: "pull-left chart-toggler", color: 6, axis_n: 1, series_type: "spline" %>
+            <%= label_tag "carbon_toggler", "CO2 emissions", class: "pull-left" %>
+          </div>
+          <div class="span2" style="display: none;" >
+            <%= check_box_tag "usage_toggler", "amount", false, class: "pull-left chart-toggler", color: 6, axis_n: 1, series_type: "spline" %>
+            <%= label_tag "usage_toggler", "Energy usage", class: "pull-left" %>      
+          </div>
+          <div class="span2" style="display: none;" >
+            <%= check_box_tag "price_toggler", "price", false, class: "pull-left chart-toggler", color: 5, axis_n: 2, series_type: "line" %>
+            <%= label_tag "price_toggler", "Energy price", class: "pull-left" %>
+          </div>
+          <div class="span3">
+            <input class="graph_nav pull-right btn-primary btn span2" disabled="true" id="next_period" type="button" value="Next"> 
+          </div>
+        </div>
+      </div>
+      <div class="span2">
+        <input class="span2 btn-success btn" id="reset_graph" type="button" value="Reset graph"> 
+
+        <div class="span2 right_container">
+          Totals for the period:
+          <span id="date" class="totals">All time</span> <br/>
+          Cost: <br/> 
+          <span id="energy_cost" class="totals">###</span> <br/>
+          Usage: <br/> 
+          <span id="amount" class="totals">###</span> <br/>
+          Carbon footprint: <br/> 
+          <span id="carbon_result" class="totals">###</span> <br/>        
+        </div>
+
+        <div id="comparison_container" style="display: none;" class="span2 right_container">
+          Compare to: <br/>
+          <label id="last_period" class="checkbox">
+            <%= check_box_tag "last_period", "", false, class: "comparison_toggler" %>
+            <span>Previous year</span>
+          </label>
+          <label id="next_period_comp" class="checkbox">
+            <%= check_box_tag "next_period_comp", "", false, class: "comparison_toggler" %>
+            <span>Next year</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>
+<%= render partial: "show_js_drill.html.erb" %>
+<%= render partial: "buttons_js.html.erb" %>

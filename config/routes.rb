@@ -62,7 +62,7 @@ SmartEnergy::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'households#chart_drill', :defaults => { :id => Household.last.id }
+  root :to => 'households#power_usage', :defaults => { :id => Household.last.id }
 
   # See how all your routes lay out with "rake routes"
 

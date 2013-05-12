@@ -1,4 +1,6 @@
 class HouseholdsController < ApplicationController
+  before_filter :authenticate_user!
+
   # GET /households
   # GET /households.json
   def index
@@ -87,8 +89,16 @@ class HouseholdsController < ApplicationController
   end
 
   def power_usage
-    @type = "power"
-    chart
+    @household = Household.find(params[:id]) 
+    @type = "power_records"
+    @date = Time.now
+    @unit = "all"
+    @axis = "energy_cost"
+    @data = @household.readings(@type, @date, @unit, "energy_cost", true)
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def chart
