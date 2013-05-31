@@ -1,4 +1,6 @@
 SmartEnergy::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+
   resources :households do
     member do
       get "gas_usage", as: :gas_usage
@@ -7,9 +9,9 @@ SmartEnergy::Application.routes.draw do
     end
   end
 
-  match 'survey' => 'households#chart_drill', :defaults => { :id => Household.last.id }
+  match 'survey' => 'households#chart_drill'
 
-  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
+  
 
   devise_for :users
 
@@ -62,7 +64,7 @@ SmartEnergy::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'households#power_usage', :defaults => { :id => Household.last.id }
+  root :to => 'households#power_usage'
 
   # See how all your routes lay out with "rake routes"
 

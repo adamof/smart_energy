@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20130205130243) do
 
   create_table "carbon_intensities", :force => true do |t|
     t.datetime "period"
-    t.decimal  "value",  :precision => 11, :scale => 0
+    t.float    "value"
     t.string   "type"
   end
 
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20130205130243) do
     t.string   "username"
     t.integer  "item"
     t.string   "table"
-    t.integer  "month"
+    t.integer  "month",      :limit => 2
     t.integer  "year",       :limit => 8
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(:version => 20130205130243) do
 
   create_table "records", :force => true do |t|
     t.integer  "household_id"
-    t.decimal  "amount",           :precision => 11,  :scale => 0
+    t.float    "amount"
     t.datetime "period_end"
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
-    t.string   "type",                                             :null => false
-    t.decimal  "carbon_intensity", :precision => 255, :scale => 0
-    t.decimal  "carbon_result",    :precision => 255, :scale => 0
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "type",             :null => false
+    t.float    "carbon_intensity"
+    t.float    "carbon_result"
     t.float    "price"
     t.float    "energy_cost"
   end

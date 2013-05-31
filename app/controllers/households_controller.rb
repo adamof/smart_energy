@@ -89,7 +89,7 @@ class HouseholdsController < ApplicationController
   end
 
   def power_usage
-    @household = Household.find(params[:id]) 
+    @household = params[:id].present? ? Household.find(params[:id]) : Household.last 
     @type = "power_records"
     @date = Time.now
     @unit = "all"

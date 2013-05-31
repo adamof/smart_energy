@@ -30,7 +30,7 @@
   }
 
   function init_graph() {
-    $.getJSON("<%= readings_household_path %>", 
+    $.getJSON("<%= readings_household_path(@household.id) %>", 
       { date: "<%= @date %>",
         unit: "<%= @unit %>",
         type: "<%= @type %>",
@@ -135,7 +135,7 @@
         type = $(toggler).attr("series_type");
 
     if(toggler.checked){
-      $.getJSON("<%= readings_household_path %>", 
+      $.getJSON("<%= readings_household_path(@household.id) %>", 
         { date: $(".period-shown #date").val(),
           unit: $(".period-shown #unit").val(),
           type: $(".period-shown #type").val(),
@@ -154,7 +154,7 @@
   }
 
   function drilldown(point) {
-    $.getJSON("<%= readings_household_path %>", 
+    $.getJSON("<%= readings_household_path(@household.id) %>", 
       { date: point.date,
         unit: point.unit,
         type: point.type,
@@ -224,7 +224,7 @@
             index = 1;
       }
       if(this.checked){
-        $.getJSON("<%= readings_household_path %>",  
+        $.getJSON("<%= readings_household_path(@household.id) %>",  
           { date: period,
             unit: $(".period-shown #unit").val(),
             type: $(".period-shown #type").val(),
